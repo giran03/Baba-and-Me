@@ -9,7 +9,7 @@ public class SpritesLookAt : MonoBehaviour
         Vector3 cameraPosition = Camera.main.transform.position;
 
         cameraPosition.y = transform.position.y;
-        transform.LookAt(cameraPosition);
-        transform.Rotate(0, 180, 0);
+        transform.LookAt(cameraPosition, Vector3.up);
+        transform.Rotate(transform.rotation.x, 180, transform.rotation.z);
     }
 }

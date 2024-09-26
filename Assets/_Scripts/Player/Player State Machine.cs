@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateMachine : MonoBehaviour
+public class PlayerStateMachine : MonoBehaviour, IDamageable
 {
     [Header("Movement")]
     [SerializeField] float walkSpeed;
@@ -13,24 +14,32 @@ public class PlayerStateMachine : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] float playerHeight;
-    [SerializeField] LayerMask groundLayer;
+    public LayerMask groundLayer;
     bool grounded;
+
+    [Header("Puzzle")]
+    [SerializeField] readonly List<string> _keysInventory = new();
 
     [Header("Configs")]
     [SerializeField] Transform orientation;
 
-
+    // inputs
     float horizontalInput;
     float verticalInput;
 
-    (Vector3, Quaternion) initialPosition;
-    Vector3 moveDirection;
+    // configs
+    float _playerHealth;
+
     Rigidbody rb;
     Vector3 flatVel;
+    (Vector3, Quaternion) initialPosition;
 
     // state variables
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
+
+    // public declarations
+    public Vector3 moveDirection;
 
     public PlayerBaseState CurrentState { get => _currentState; set => _currentState = value; }
 
@@ -46,6 +55,9 @@ public class PlayerStateMachine : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         initialPosition = (transform.position, transform.rotation);
+
+        // set defaults
+        _playerHealth = PlayerConfigs.Instance.playerHealth;
     }
 
     void Update()
@@ -54,7 +66,7 @@ public class PlayerStateMachine : MonoBehaviour
         _currentState.UpdateStates();
 
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, playerHeight * 0.5f + 0.2f, groundLayer);
+        grounded = Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, playerHeight * 0.5f + 0.6f, groundLayer);
 
         if (hit.collider != null)
         {
@@ -128,4 +140,33 @@ public class PlayerStateMachine : MonoBehaviour
         rb.velocity = Vector3.zero;
         Physics.SyncTransforms();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        CurrentState.CurrentSubState.OnTriggerEnter(other);
+    }
+
+    public void Damage(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance)
+    {
+        _playerHealth -= damageAmount;
+        Debug.Log($"PALYER HEALTH REDUCED TO: {_playerHealth}");
+    }
+
+    #region PUZZLE
+
+    public void AddKeyToInventory(string keyName) => _keysInventory.Add(keyName);
+
+    public string GetKeyFromInventory(string keyName)
+    {
+        foreach (var key in _keysInventory)
+        {
+            if (key == keyName)
+                return key;
+        }
+        return null;
+    }
+
+    public void RemoveKeyFromInventory(string keyName) => _keysInventory.Remove(keyName);
+
+    #endregion
 }

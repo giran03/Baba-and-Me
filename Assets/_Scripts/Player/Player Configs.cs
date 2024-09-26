@@ -7,11 +7,30 @@ using UnityEngine;
 /// </summary>
 public class PlayerConfigs : MonoBehaviour
 {
-    public int PlayerHealth = 100;
     public static PlayerConfigs Instance;
+
+    [Header("General Configs")]
+    public float playerHealth = 100;
+    public GameObject ui_CriticalHitPrefab;
+
+    [Header("Player Attack")]
+    public List<AttackStats> attackList = new();
+
+    [Header("Player Dash")]
+    public float dashCooldown = 0.5f;
+    public float dashSpeed = 20f;
+    public float invincibilityDuration = .5f;
+
+    [Header("Animation")]
     public List<AnimatorController> playerAnimationList;
 
-    public int Health { get; set; }
+    [Header("Drops")]
+    public GameObject dropPrefab;
+    public float dropRadius;
+    public float dropDetectionRadius;
+
+    // references
+    public AttackTypes attackTypes;
 
     private void Awake()
     {
@@ -19,16 +38,22 @@ public class PlayerConfigs : MonoBehaviour
             Destroy(Instance);
         else
             Instance = this;
+
+        ResetAllPrefs();
     }
 
-    private void Start()
+    public AttackStats FindAttackObject(string attackName)
     {
-        Health = PlayerHealth;
+        foreach (AttackStats attack in attackList)
+        {
+            if (attack.name == attackName)
+                return attack;
+        }
+        return null;
     }
 
-    public void Damage()
+    public void ResetAllPrefs()
     {
-        Health-= 10;
-        Debug.Log($"Damaged player! Health: {Health}");
+        PlayerPrefs.SetString("isPlayerReadyToAttack", "true");
     }
 }

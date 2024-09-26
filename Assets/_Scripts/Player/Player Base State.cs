@@ -4,16 +4,18 @@ using UnityEngine;
 
 public abstract class PlayerBaseState
 {
-    private bool isRootState { get; set; }
-    private PlayerStateMachine _ctx { get; set; }
-    private PlayerStateFactory _factory { get; set; }
-    private PlayerBaseState _currentSubState { get; set; }
-    private PlayerBaseState _currentSuperState { get; set; }
+    private bool _isRootState = false;
+    private PlayerStateMachine _ctx;
+    private PlayerStateFactory _factory;
+    private PlayerBaseState _currentSubState;
+    private PlayerBaseState _currentSuperState;
+
+    string _currentAnimation = "";
 
     public bool IsRootState
     {
-        get => isRootState;
-        set => isRootState = value;
+        get => _isRootState;
+        set => _isRootState = value;
     }
 
     public PlayerStateMachine CurrentContext
@@ -45,13 +47,13 @@ public abstract class PlayerBaseState
         _ctx = currentContext;
         _factory = factory;
     }
-    
+
     public abstract void EnterState();
     public abstract void UpdateState();
     public abstract void ExitState();
     public abstract void CheckSwitchStates();
     public abstract void InitializeSubState();
-    public abstract void OnTriggerEnter();
+    public abstract void OnTriggerEnter(Collider other);
 
     public void UpdateStates()
     {
@@ -71,7 +73,7 @@ public abstract class PlayerBaseState
 
         newState.EnterState();
 
-        if (isRootState)
+        if (_isRootState)
             _ctx.CurrentState = newState;
         else
             _currentSuperState?.SetSubState(newState);
@@ -86,19 +88,39 @@ public abstract class PlayerBaseState
         newSubState.SetSuperState(this);
     }
 
-    public virtual void AnimationUpdate(string searchString)
+    public void ChangeAnimation(string animationName, bool flipSprite = false)
     {
-        Animator _animator = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Animator>();
+        CurrentContext.gameObject.GetComponentInChildren<SpriteRenderer>().flipX = flipSprite;
 
-        foreach (var animatorController in PlayerConfigs.Instance.playerAnimationList)
+        if (!_currentAnimation.Contains(animationName))
         {
-            if (animatorController.name.Contains(searchString))
-            {
-                _animator.runtimeAnimatorController = animatorController;
-                return;
-            }
+            foreach (var newAnimation in PlayerConfigs.Instance.playerAnimationList)
+                if (newAnimation.name.Contains(animationName))
+                {
+                    _currentAnimation = newAnimation.name;
+                    CurrentContext.gameObject.GetComponentInChildren<Animator>().runtimeAnimatorController = newAnimation;
+                }
         }
+    }
 
-        Debug.LogError($"Could not find animator controller with name containing '{searchString}'");
+    public void CheckAnimation()
+    {
+        var x = Input.GetAxis("Horizontal");
+        var y = Input.GetAxis("Vertical");
+
+        if (_currentAnimation.Contains("attack") || _currentAnimation.Contains("idle"))
+            return;
+        
+        if (x != 0 || y != 0)
+        {
+            if (x > 0)
+                ChangeAnimation("walk_x");
+            else if (x < 0)
+                ChangeAnimation("walk_left");
+            else if (y < 0)
+                ChangeAnimation("walk_down");
+            else if (y > 0)
+                ChangeAnimation("walk_up");
+        }
     }
 }

@@ -16,12 +16,13 @@ public class PlayerIdle : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        AnimationUpdate("idle");
+        ChangeAnimation("idle");
+        CheckAnimation();
     }
 
     public override void ExitState()
     {
-
+        
     }
 
     public override void CheckSwitchStates()
@@ -35,7 +36,7 @@ public class PlayerIdle : PlayerBaseState
         SetSubState(Factory.Attacking());
     }
 
-    public override void OnTriggerEnter()
+    public override void OnTriggerEnter(Collider other)
     {
 
     }

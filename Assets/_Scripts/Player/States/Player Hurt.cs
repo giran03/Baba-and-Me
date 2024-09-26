@@ -28,7 +28,7 @@ public class PlayerHurt : PlayerBaseState
         
     }
 
-    public override void OnTriggerEnter()
+    public override void OnTriggerEnter(Collider other)
     {
         
     }

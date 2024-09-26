@@ -38,11 +38,12 @@ public class PlayerMovement : MonoBehaviour
         initialPosition = (transform.position, transform.rotation);
     }
 
+
     void Update()
     {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, playerHeight * 0.5f + 0.2f, groundLayer);
-
+        grounded = Physics.SphereCast(transform.position, 0.2f, Vector3.down, out RaycastHit hit, playerHeight * 0.5f, groundLayer);
+        
         if (hit.collider != null)
         {
             Vector3 movePos = transform.position;

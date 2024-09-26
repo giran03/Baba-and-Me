@@ -27,9 +27,4 @@ public class PlayerStateFactory
     {
         return new PlayerAttacking(_context, this);
     }
-
-    public PlayerBaseState Dashing()
-    {
-        return new PlayerDashing(_context, this);
-    }
 }
