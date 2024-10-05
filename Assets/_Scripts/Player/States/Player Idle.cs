@@ -22,7 +22,7 @@ public class PlayerIdle : PlayerBaseState
 
     public override void ExitState()
     {
-        
+
     }
 
     public override void CheckSwitchStates()

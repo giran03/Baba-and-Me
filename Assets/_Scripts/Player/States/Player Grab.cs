@@ -10,7 +10,6 @@ public class PlayerGrab : MonoBehaviour
     FixedJoint fixedJoint;
     Outline boulderOutline;
 
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E) && !isGrabbing)
@@ -37,22 +36,26 @@ public class PlayerGrab : MonoBehaviour
 
     void UpdateGrab()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
-        foreach (var hitCollider in hitColliders)
+        var hitColliders = new Collider[10];
+        var numHits = Physics.OverlapSphereNonAlloc(transform.position, 1.5f, hitColliders);
+        for (int i = 0; i < numHits; i++)
         {
-            if (hitCollider.gameObject.CompareTag("Grabbable"))
+            var hitCollider = hitColliders[i];
             {
-                fixedJoint = gameObject.AddComponent<FixedJoint>();
-                boulderRb = hitCollider.transform.GetComponent<Rigidbody>();
-                boulderOutline = hitCollider.transform.GetComponent<Outline>();
-                boulderOutline.enabled = true;
+                if (hitCollider.gameObject.CompareTag("Grabbable"))
+                {
+                    fixedJoint = gameObject.AddComponent<FixedJoint>();
+                    boulderRb = hitCollider.transform.GetComponent<Rigidbody>();
+                    boulderOutline = hitCollider.transform.GetComponent<Outline>();
+                    boulderOutline.enabled = true;
 
-                hitCollider.transform.position = hitCollider.transform.position + Vector3.up * .8f;
+                    hitCollider.transform.position = hitCollider.transform.position + Vector3.up * .8f;
 
-                defaultRbMass = boulderRb.mass;
-                boulderRb.mass = 4f;
+                    defaultRbMass = boulderRb.mass;
+                    boulderRb.mass = 4f;
 
-                fixedJoint.connectedBody = boulderRb;
+                    fixedJoint.connectedBody = boulderRb;
+                }
             }
         }
     }
@@ -68,5 +71,3 @@ public class PlayerGrab : MonoBehaviour
         }
     }
 }
-
-

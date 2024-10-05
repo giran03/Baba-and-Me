@@ -4,29 +4,42 @@ public class DoorKeyPuzzle : MonoBehaviour
 {
     public GameObject keyObj;
 
+    PlayerStateMachine _player;
+
     string _requiredKey;
+
+    bool CanInteractDoor { get; set; }
+
+    string playerKeyFromPlayerInventory;
 
     private void Start()
     {
         _requiredKey = keyObj.name;
         keyObj.GetComponent<KeyPuzzle>().PuzzleManager = this;
-        Debug.Log($"PuzzleManager: {keyObj.GetComponent<KeyPuzzle>().PuzzleManager}");
+        _player = GameObject.Find("Player").GetComponent<PlayerStateMachine>();
     }
 
-    void UnlockDoor(string currentKey)
+    private void Update()
     {
-        Debug.Log($"Current key: {currentKey} Required key: {_requiredKey}");
-        Debug.Log($"{_requiredKey == currentKey}");
-        if (_requiredKey == currentKey)
+        if (!CanInteractDoor) return;
+
+        if (_requiredKey == playerKeyFromPlayerInventory)
+        {
+            _player.KeysInventory.Remove(_requiredKey);
             Destroy(gameObject);
+
+            Debug.Log($"Unlocked puzzle!");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            string playerKeyFromInventory = other.GetComponent<PlayerStateMachine>().GetKeyFromInventory(_requiredKey);
-            UnlockDoor(playerKeyFromInventory);
+            CanInteractDoor = true;
+            playerKeyFromPlayerInventory = _player.GetKeyFromInventory(_requiredKey);
         }
+        else
+            CanInteractDoor = false;
     }
 }

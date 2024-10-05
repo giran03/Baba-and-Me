@@ -10,7 +10,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     float moveSpeed;
 
     [Header("Keybinds")]
-    [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode interactKey = KeyCode.E;
 
     [Header("Ground Check")]
     [SerializeField] float playerHeight;
@@ -18,7 +19,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     bool grounded;
 
     [Header("Puzzle")]
-    [SerializeField] readonly List<string> _keysInventory = new();
+    public List<string> KeysInventory;
 
     [Header("Configs")]
     [SerializeField] Transform orientation;
@@ -26,6 +27,9 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     // inputs
     float horizontalInput;
     float verticalInput;
+
+    // interaction
+    public bool IsInteracting { get; set; }
 
     // configs
     float _playerHealth;
@@ -58,12 +62,15 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
 
         // set defaults
         _playerHealth = PlayerConfigs.Instance.playerHealth;
+        KeysInventory = new();
     }
 
     void Update()
     {
         // states
         _currentState.UpdateStates();
+
+        // TODO: PLAYER HURT SPRITE COLOR
 
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, playerHeight * 0.5f + 0.6f, groundLayer);
@@ -154,11 +161,11 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
 
     #region PUZZLE
 
-    public void AddKeyToInventory(string keyName) => _keysInventory.Add(keyName);
+    public void AddKeyToInventory(string keyName) => KeysInventory.Add(keyName);
 
     public string GetKeyFromInventory(string keyName)
     {
-        foreach (var key in _keysInventory)
+        foreach (var key in KeysInventory)
         {
             if (key == keyName)
                 return key;
@@ -166,7 +173,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         return null;
     }
 
-    public void RemoveKeyFromInventory(string keyName) => _keysInventory.Remove(keyName);
+    public void RemoveKeyFromInventory(string keyName) => KeysInventory.Remove(keyName);
 
     #endregion
 }

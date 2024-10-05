@@ -51,15 +51,15 @@ public class DamageableStats
         Debug.Log($"Multiplier: {multiplier}");
         Debug.Log($"Health: {_health}");
 
-        // if (_currentObect.transform.childCount > 0)
-        // {
-        //     _currentObect.transform.GetChild(0).TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer);
-        //     if (spriteRenderer != null)
-        //     {
-        //         spriteRenderer.material.color = Color.red;
-        //         isAttacked = true;
-        //     }
-        // }
+        if (_currentObect.transform.childCount > 0)
+        {
+            _currentObect.transform.GetChild(0).TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer);
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.material.color = Color.red;
+                isAttacked = true;
+            }
+        }
 
         if (_health <= 0)
         {
@@ -90,7 +90,7 @@ public class DamageableStats
 
         if (spriteColorTimer < 0)
         {
-            // _currentObect.GetComponentInChildren<SpriteRenderer>().material.color = Color.white;
+            _currentObect.GetComponentInChildren<SpriteRenderer>().material.color = Color.white;
             spriteColorTimer = .2f;
             isAttacked = false;
         }

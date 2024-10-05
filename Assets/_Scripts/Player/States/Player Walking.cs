@@ -40,7 +40,6 @@ public class PlayerWalking : PlayerBaseState
     {
         if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
             SwitchState(Factory.Idle());
-
     }
 
     public override void InitializeSubState()
@@ -77,14 +76,14 @@ public class PlayerWalking : PlayerBaseState
     {
         CurrentContext.transform.GetChild(0).TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer);
         spriteRenderer.material.color = Color.grey;
-        
+
         CurrentContext.gameObject.GetComponent<Collider>().enabled = false;
         Debug.Log($"Collider disabled for: {seconds} seconds");
-        
+
         yield return new WaitForSeconds(seconds);
         CurrentContext.gameObject.GetComponent<Collider>().enabled = true;
         spriteRenderer.material.color = Color.white;
-        
+
         Debug.Log($"Collider enabled: {CurrentContext.gameObject.GetComponent<Collider>().enabled}");
     }
 }
