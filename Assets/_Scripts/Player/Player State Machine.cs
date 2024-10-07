@@ -173,6 +173,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         return null;
     }
 
+    public bool HasKey(string keyName) => KeysInventory.Contains(keyName);
+
     public void RemoveKeyFromInventory(string keyName) => KeysInventory.Remove(keyName);
 
     #endregion

@@ -18,7 +18,7 @@ public class PlayerAttacking : PlayerBaseState
 
     public override void EnterState()
     {
-        
+
     }
 
     public override void ExitState()
@@ -38,6 +38,8 @@ public class PlayerAttacking : PlayerBaseState
 
     public override void UpdateState()
     {
+        if (PlayerGrab.IsGrabbing) return;
+        
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, CurrentContext.groundLayer);
 
         if (_basicAttack != null)

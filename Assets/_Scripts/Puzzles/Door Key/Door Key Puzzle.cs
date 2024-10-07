@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class DoorKeyPuzzle : MonoBehaviour
 {
-    public GameObject keyObj;
+    [SerializeField] GameObject keyObj;
 
     PlayerStateMachine _player;
 
     string _requiredKey;
 
-    bool CanInteractDoor { get; set; }
-
-    string playerKeyFromPlayerInventory;
+    bool _canInteractDoor;
 
     private void Start()
     {
@@ -19,27 +17,24 @@ public class DoorKeyPuzzle : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<PlayerStateMachine>();
     }
 
+
     private void Update()
     {
-        if (!CanInteractDoor) return;
-
-        if (_requiredKey == playerKeyFromPlayerInventory)
+        if (_player.HasKey(_requiredKey) && _canInteractDoor)
         {
+            _canInteractDoor = false;
             _player.KeysInventory.Remove(_requiredKey);
             Destroy(gameObject);
-
-            Debug.Log($"Unlocked puzzle!");
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            CanInteractDoor = true;
-            playerKeyFromPlayerInventory = _player.GetKeyFromInventory(_requiredKey);
-        }
-        else
-            CanInteractDoor = false;
+        _canInteractDoor = other.CompareTag("Player");
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _canInteractDoor = false;
     }
 }
