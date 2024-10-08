@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Grabbable
+  - Key
+  - Orc
+  - Animal
   layers:
   - Default
   - TransparentFX

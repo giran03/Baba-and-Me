@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7836012122927669806}
   m_Layer: 0
   m_Name: Copper Key
-  m_TagString: Untagged
+  m_TagString: Key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -17,8 +17,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     [Header("Orc Animation")]
     public List<AnimatorController> AnimationList;
-    public List<int> AnimationHashCodes;
-    public Dictionary<string, int> AnimationDictionary = new();
 
     [HideInInspector] public NavMeshAgent _navMeshAgent;
     [HideInInspector] public bool isAttacking;
@@ -42,10 +40,6 @@ public class EnemyStateMachine : MonoBehaviour
     void Start()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
-
-        foreach (var animation in AnimationList)
-            AnimationDictionary.Add(animation.name, animation.GetHashCode());
-        // AnimationHashCodes.Add(animation.GetHashCode());
     }
 
     void Update()

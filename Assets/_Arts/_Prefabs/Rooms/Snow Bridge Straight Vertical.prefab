@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5049579015159456982}
   - component: {fileID: 1373262765526864056}
   - component: {fileID: 4691959158036090143}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Snow Bridge Straight Vertical
   m_TagString: Untagged
   m_Icon: {fileID: 0}

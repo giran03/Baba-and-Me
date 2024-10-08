@@ -8,7 +8,7 @@ public interface IDamageable
 
 public class DamageableStats
 {
-    float _health;
+    int _health;
     GameObject _currentObect;
     public DamageMultiplier _damageMultiplier;
     float spriteColorTimer = .2f;
@@ -37,7 +37,7 @@ public class DamageableStats
         float random = Random.Range(0f, 1f);
         if (random <= weaponCriticalChance)
         {
-            _health -= damageAmount * multiplier * weaponCriticalDamage;
+            _health -= (int)(damageAmount * multiplier * weaponCriticalDamage);
 
             CriticalOccured();
 
@@ -45,7 +45,7 @@ public class DamageableStats
             Debug.Log($"random value of: {random} with chance: {weaponCriticalChance}");
         }
         else
-            _health -= damageAmount * multiplier;
+            _health -= (int)(damageAmount * multiplier);
 
         Debug.Log($"Damage: {damageAmount * multiplier}");
         Debug.Log($"Multiplier: {multiplier}");

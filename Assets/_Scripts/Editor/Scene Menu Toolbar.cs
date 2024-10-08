@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class SceneMenuToolbar : MonoBehaviour
 {
-    [MenuItem("Level Loader/Load Main Menu #&1")]
+    [MenuItem("Level Loader/Load Showcase #&1")]
     public static void LoadMainMenu()
     {
-        LoadScene("Assets/Scenes/main_menu.unity");
+        LoadScene("Assets/_Scenes/Showcase.unity");
     }
 
     private static void LoadScene(string scenePath)

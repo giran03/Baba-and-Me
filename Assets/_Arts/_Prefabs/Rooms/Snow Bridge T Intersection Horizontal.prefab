@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2666244590393182884}
   - component: {fileID: 8627784181412652283}
   - component: {fileID: 7334412241212117861}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Snow Bridge Vertical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 2270144362910125041}
   - component: {fileID: 7106008478446915342}
   - component: {fileID: 5677899316968373235}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Snow Bridge T Intersection Horizontal
   m_TagString: Untagged
   m_Icon: {fileID: 0}

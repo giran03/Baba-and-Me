@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7958816049389623593}
   - component: {fileID: 2727558182585779792}
   - component: {fileID: 3788169596462075143}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Snow Bridge T Intersection Vertical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,6 +105,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Snow Bridge Straight Horizontal
+      objectReference: {fileID: 0}
+    - target: {fileID: 5123358414997842994, guid: 0e5e61cfb8118c24698d366c8ba94bf2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6897903009609467056, guid: 0e5e61cfb8118c24698d366c8ba94bf2,
         type: 3}

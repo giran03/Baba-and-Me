@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerStateMachine : MonoBehaviour, IDamageable
@@ -176,6 +177,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public bool HasKey(string keyName) => KeysInventory.Contains(keyName);
 
     public void RemoveKeyFromInventory(string keyName) => KeysInventory.Remove(keyName);
+    public void ClearKeyInventory() => KeysInventory.Clear();
 
     #endregion
 }

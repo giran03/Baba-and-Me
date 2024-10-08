@@ -44,10 +44,9 @@ public class BoulderPuzzle : MonoBehaviour
                 currentBoulders.Add(other.gameObject);
         }
     }
-
     void UnlockObjects() => objectToUnlock?.ForEach(obj => obj.SetActive(false));
 
     void LockObjects() => objectToLock?.ForEach(obj => obj.SetActive(true));
 
-    public static bool CompareLists<T>(List<T> aListA, List<T> aListB) => aListA.Count == aListB.Count && aListA.All(aListB.Contains);
+    bool CompareLists<T>(List<T> aListA, List<T> aListB) => aListA.Count == aListB.Count && aListA.All(aListB.Contains);
 }

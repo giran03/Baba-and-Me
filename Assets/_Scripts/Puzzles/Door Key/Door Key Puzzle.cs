@@ -8,12 +8,11 @@ public class DoorKeyPuzzle : MonoBehaviour
 
     string _requiredKey;
 
-    bool _canInteractDoor;
+    bool _canInteractDoor = false;
 
     private void Start()
     {
         _requiredKey = keyObj.name;
-        keyObj.GetComponent<KeyPuzzle>().PuzzleManager = this;
         _player = GameObject.Find("Player").GetComponent<PlayerStateMachine>();
     }
 
@@ -25,16 +24,12 @@ public class DoorKeyPuzzle : MonoBehaviour
             _canInteractDoor = false;
             _player.KeysInventory.Remove(_requiredKey);
             Destroy(gameObject);
+
+            _player.ClearKeyInventory();
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        _canInteractDoor = other.CompareTag("Player");
-    }
+    private void OnTriggerEnter(Collider other) => _canInteractDoor = other.CompareTag("Player");
 
-    private void OnTriggerExit(Collider other)
-    {
-        _canInteractDoor = false;
-    }
+    private void OnTriggerExit(Collider other) => _canInteractDoor = false;
 }
