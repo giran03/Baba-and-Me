@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
@@ -25,7 +26,8 @@ public class FleeBehavior : MonoBehaviour
 
     void Start()
     {
-        threats.Add(GameObject.FindGameObjectWithTag("Player").transform);
+        var players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        players.ForEach(x=>threats.Add(x.transform));
 
         agent = GetComponent<NavMeshAgent>();
 
@@ -59,31 +61,29 @@ public class FleeBehavior : MonoBehaviour
         return false;
     }
 
+    // TODO: IMPROVE THIS!!! | Destroy after flee; Respawn;
     private void FleeFromThreats()
     {
-        Vector3 fleeDirection = Vector3.zero; // Initialize to zero
-
-        // Calculate average flee direction from all threats
+        //get the closest threat
+        Transform closestThreat = null;
+        float closestDistance = float.MaxValue;
         foreach (Transform threat in threats)
         {
-            if (threat.CompareTag("Player"))
+            float distance = Vector3.Distance(transform.position, threat.position);
+            if (distance < closestDistance)
             {
-                if (threat != null)
-                    fleeDirection += transform.position - threat.position;
+                closestThreat = threat;
+                closestDistance = distance;
             }
         }
 
-        // Normalize the direction to avoid too strong pull
-        fleeDirection = fleeDirection.normalized;
+        //flee from the closest threat
+        Vector3 fleeDirection = (transform.position - closestThreat.position).normalized;
+        Vector3 fleePosition = transform.position + fleeDirection * fleeDistance;
 
-        Vector3 fleePosition = transform.position + fleeDirection * 15f;
-
-        NavMesh.SamplePosition(fleePosition, out NavMeshHit navHit, fleeDistance, NavMesh.AllAreas);
-        // move speed
+        // agent move speed
         agent.speed = runSpeed;
-        agent.SetDestination(navHit.position);
-
-        Debug.Log("Fleeing!");
+        agent.SetDestination(fleePosition);
     }
 
     void Patrol()

@@ -17,6 +17,7 @@ public class DeerHandler : MonoBehaviour, IDamageable
 
     public void Damage(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance)
     {
+        Debug.Log($"PLAYER IS ATTACKING ME I'M A DEER!!!");
         damageableStats.Hit(damageAmount, weaponCriticalDamage, weaponCriticalChance);
     }
 

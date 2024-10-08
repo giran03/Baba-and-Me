@@ -4,34 +4,55 @@ using UnityEngine;
 
 public class PlayerGrab : MonoBehaviour
 {
-    public static bool IsGrabbing {get; set;}
+    public static bool IsGrabbing { get; set; }
     float defaultRbMass;
     Rigidbody boulderRb;
     FixedJoint fixedJoint;
     Outline boulderOutline;
+    bool isGrabOnCooldown;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !IsGrabbing)
+        if (CheckClosestObject() != null)
         {
+            boulderOutline = CheckClosestObject().GetComponent<Outline>();
+
+            if (!IsGrabbing)
+            {
+                boulderOutline.OutlineColor = Color.cyan;
+                boulderOutline.OutlineWidth = 5f;
+                boulderOutline.enabled = true;
+            }
+        }
+        else
+        {
+            if (boulderOutline != null)
+            {
+                boulderOutline.enabled = false;
+                boulderOutline = null;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && !IsGrabbing && !isGrabOnCooldown)
             UpdateGrab();
-        }
-        else if (Input.GetKeyUp(KeyCode.E) && IsGrabbing)
-        {
-            UpdateRelease();
+            
+        if (Input.GetKeyUp(KeyCode.E) && IsGrabbing && !isGrabOnCooldown)
             StartCoroutine(GrabbingCooldown());
-        }
     }
 
     IEnumerator GrabbingCooldown()
     {
+        isGrabOnCooldown = true;
+        UpdateRelease();
+        
         yield return new WaitForSeconds(1f);
 
         Debug.Log($"Grab done CD");
+        isGrabOnCooldown = false;
         IsGrabbing = false;
     }
 
-    void UpdateGrab()
+    public GameObject CheckClosestObject()
     {
         Collider closestHitCollider = null;
         float closestDistanceSqr = Mathf.Infinity;
@@ -53,20 +74,29 @@ public class PlayerGrab : MonoBehaviour
 
         if (closestHitCollider != null)
         {
-            IsGrabbing = true;
-
-            fixedJoint = gameObject.AddComponent<FixedJoint>();
-            boulderRb = closestHitCollider.transform.GetComponent<Rigidbody>();
-            boulderOutline = closestHitCollider.transform.GetComponent<Outline>();
-            boulderOutline.enabled = true;
-
-            closestHitCollider.transform.position = closestHitCollider.transform.position + Vector3.up * .8f;
-
-            defaultRbMass = boulderRb.mass;
-            boulderRb.mass = 4f;
-
-            fixedJoint.connectedBody = boulderRb;
+            return closestHitCollider.gameObject;
         }
+        return null;
+    }
+
+    void UpdateGrab()
+    {
+        IsGrabbing = true;
+
+        var boulder = CheckClosestObject();
+        fixedJoint = gameObject.AddComponent<FixedJoint>();
+
+        boulderRb = boulder.transform.GetComponent<Rigidbody>();
+        boulderOutline.OutlineColor = Color.green;
+        boulderOutline.OutlineWidth = 2f;
+        boulderOutline.enabled = true;
+
+        boulder.transform.position = boulder.transform.position + Vector3.up * .8f;
+
+        defaultRbMass = boulderRb.mass;
+        boulderRb.mass = 4f;
+
+        fixedJoint.connectedBody = boulderRb;
     }
 
     void UpdateRelease()
@@ -74,6 +104,10 @@ public class PlayerGrab : MonoBehaviour
         if (fixedJoint != null)
         {
             boulderRb.mass = defaultRbMass;
+            boulderRb = null;
+
+            boulderOutline.OutlineColor = Color.cyan;
+            boulderOutline.OutlineWidth = 5f;
             boulderOutline.enabled = false;
 
             Destroy(fixedJoint);

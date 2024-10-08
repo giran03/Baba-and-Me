@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -91,10 +92,14 @@ public abstract class PlayerBaseState
     public void ChangeAnimation(string animationName, bool flipSprite = false)
     {
         CurrentContext.gameObject.GetComponentInChildren<SpriteRenderer>().flipX = flipSprite;
+        var animationList = PlayerConfigs.Instance.playerAnimationList;
+
+        if (PlayerConfigs.Instance.isMisha)
+            animationList = PlayerConfigs.Instance.MishaAnimationList;
 
         if (!_currentAnimation.Contains(animationName))
         {
-            foreach (var newAnimation in PlayerConfigs.Instance.playerAnimationList)
+            foreach (var newAnimation in animationList)
                 if (newAnimation.name.Contains(animationName))
                 {
                     _currentAnimation = newAnimation.name;
@@ -108,19 +113,19 @@ public abstract class PlayerBaseState
         var x = Input.GetAxis("Horizontal");
         var y = Input.GetAxis("Vertical");
 
-        if (_currentAnimation.Contains("attack") || _currentAnimation.Contains("idle"))
+        if (_currentAnimation.Contains("attack") || _currentAnimation.Contains("Idle"))
             return;
-        
+
         if (x != 0 || y != 0)
         {
             if (x > 0)
-                ChangeAnimation("walk_x");
+                ChangeAnimation("Run_right");
             else if (x < 0)
-                ChangeAnimation("walk_left");
+                ChangeAnimation("Run_left");
             else if (y < 0)
-                ChangeAnimation("walk_down");
+                ChangeAnimation("Run_down");
             else if (y > 0)
-                ChangeAnimation("walk_up");
+                ChangeAnimation("Run_up");
         }
     }
 }

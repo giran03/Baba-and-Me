@@ -13,7 +13,8 @@ public class DoorKeyPuzzle : MonoBehaviour
     private void Start()
     {
         _requiredKey = keyObj.name;
-        _player = GameObject.Find("Player").GetComponent<PlayerStateMachine>();
+        _player = FindAnyObjectByType<PlayerStateMachine>();
+        Debug.Log($"_player: {_player}");
     }
 
 

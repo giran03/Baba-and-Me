@@ -21,8 +21,14 @@ public class PlayerConfigs : MonoBehaviour
     public float dashSpeed = 20f;
     public float invincibilityDuration = .5f;
 
-    [Header("Animation")]
+    [Header("Current Character")]
+    public bool isMisha;
+
+    [Header("Baba Animation")]
     public List<AnimatorController> playerAnimationList;
+
+    [Header("Misha Animation")]
+    public List<AnimatorController> MishaAnimationList;
 
     [Header("Drops")]
     public GameObject dropPrefab;
