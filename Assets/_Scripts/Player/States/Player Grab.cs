@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerGrab : MonoBehaviour
 {
-    bool isGrabbing = false;
+    public static bool IsGrabbing {get; set;}
     float defaultRbMass;
     Rigidbody boulderRb;
     FixedJoint fixedJoint;
@@ -12,11 +12,11 @@ public class PlayerGrab : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !isGrabbing)
+        if (Input.GetKeyDown(KeyCode.E) && !IsGrabbing)
         {
             UpdateGrab();
         }
-        else if (Input.GetKeyUp(KeyCode.E) && !isGrabbing)
+        else if (Input.GetKeyUp(KeyCode.E) && IsGrabbing)
         {
             UpdateRelease();
             StartCoroutine(GrabbingCooldown());
@@ -25,38 +25,47 @@ public class PlayerGrab : MonoBehaviour
 
     IEnumerator GrabbingCooldown()
     {
-        isGrabbing = true;
-        Debug.Log($"Starting CD");
-
         yield return new WaitForSeconds(1f);
 
         Debug.Log($"Grab done CD");
-        isGrabbing = false;
+        IsGrabbing = false;
     }
 
     void UpdateGrab()
     {
+        Collider closestHitCollider = null;
+        float closestDistanceSqr = Mathf.Infinity;
         var hitColliders = new Collider[10];
         var numHits = Physics.OverlapSphereNonAlloc(transform.position, 1.5f, hitColliders);
         for (int i = 0; i < numHits; i++)
         {
             var hitCollider = hitColliders[i];
+            if (hitCollider.gameObject.CompareTag("Grabbable"))
             {
-                if (hitCollider.gameObject.CompareTag("Grabbable"))
+                var distanceSqr = (hitCollider.transform.position - transform.position).sqrMagnitude;
+                if (distanceSqr < closestDistanceSqr)
                 {
-                    fixedJoint = gameObject.AddComponent<FixedJoint>();
-                    boulderRb = hitCollider.transform.GetComponent<Rigidbody>();
-                    boulderOutline = hitCollider.transform.GetComponent<Outline>();
-                    boulderOutline.enabled = true;
-
-                    hitCollider.transform.position = hitCollider.transform.position + Vector3.up * .8f;
-
-                    defaultRbMass = boulderRb.mass;
-                    boulderRb.mass = 4f;
-
-                    fixedJoint.connectedBody = boulderRb;
+                    closestHitCollider = hitCollider;
+                    closestDistanceSqr = distanceSqr;
                 }
             }
+        }
+
+        if (closestHitCollider != null)
+        {
+            IsGrabbing = true;
+
+            fixedJoint = gameObject.AddComponent<FixedJoint>();
+            boulderRb = closestHitCollider.transform.GetComponent<Rigidbody>();
+            boulderOutline = closestHitCollider.transform.GetComponent<Outline>();
+            boulderOutline.enabled = true;
+
+            closestHitCollider.transform.position = closestHitCollider.transform.position + Vector3.up * .8f;
+
+            defaultRbMass = boulderRb.mass;
+            boulderRb.mass = 4f;
+
+            fixedJoint.connectedBody = boulderRb;
         }
     }
 

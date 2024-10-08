@@ -16,5 +16,5 @@ MonoBehaviour:
   AttackSpeed: 1.5
   AttackDestroyTime: 0.3
   CriticalDamage: 2
-  CriticalChance: 0.15
-  Damage: 15
+  CriticalChance: 0.25
+  Damage: 25
