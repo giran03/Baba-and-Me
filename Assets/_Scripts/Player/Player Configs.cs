@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Handles the Player Sprite Animation
@@ -10,8 +11,10 @@ public class PlayerConfigs : MonoBehaviour
     public static PlayerConfigs Instance;
 
     [Header("General Configs")]
+    public Image playerHealthBarImage;
     public float playerHealth = 100;
     public GameObject ui_CriticalHitPrefab;
+    public bool IsGameOver {get; set;} = false;
 
     [Header("Player Attack")]
     public List<AttackStats> attackList = new();

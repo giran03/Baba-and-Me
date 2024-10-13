@@ -13,15 +13,20 @@ public class PlayerGrab : MonoBehaviour
 
     void Update()
     {
-        if (CheckClosestObject() != null)
+        var closestObject = CheckClosestObject();
+
+        if (closestObject != null)
         {
-            boulderOutline = CheckClosestObject().GetComponent<Outline>();
+            boulderOutline = closestObject.GetComponent<Outline>();
 
             if (!IsGrabbing)
             {
-                boulderOutline.OutlineColor = Color.cyan;
-                boulderOutline.OutlineWidth = 5f;
-                boulderOutline.enabled = true;
+                if (boulderOutline != null)
+                {
+                    boulderOutline.OutlineColor = Color.cyan;
+                    boulderOutline.OutlineWidth = 5f;
+                    boulderOutline.enabled = true;
+                }
             }
         }
         else
@@ -34,23 +39,79 @@ public class PlayerGrab : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.E) && !IsGrabbing && !isGrabOnCooldown)
+        {
             UpdateGrab();
-            
-        if (Input.GetKeyUp(KeyCode.E) && IsGrabbing && !isGrabOnCooldown)
+        }
+        // else
+        // {
+        //     UpdateRelease();
+        //     StartCoroutine(GrabbingCooldown());
+        // }
+
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            UpdateRelease();
             StartCoroutine(GrabbingCooldown());
+        }
     }
 
     IEnumerator GrabbingCooldown()
     {
         isGrabOnCooldown = true;
-        UpdateRelease();
-        
+        HUDHandler.Instance.StartIconCooldown("Grab", 1f);
+
         yield return new WaitForSeconds(1f);
 
         Debug.Log($"Grab done CD");
         isGrabOnCooldown = false;
         IsGrabbing = false;
     }
+
+    void UpdateGrab()
+    {
+        if (CheckClosestObject() == null) return;
+        IsGrabbing = true;
+
+        var boulder = CheckClosestObject();
+        fixedJoint = gameObject.AddComponent<FixedJoint>();
+
+        boulderRb = boulder.transform.GetComponent<Rigidbody>();
+        if (boulderRb != null && boulderOutline != null)
+        {
+            boulderOutline.OutlineColor = Color.green;
+            boulderOutline.OutlineWidth = 2f;
+            boulderOutline.enabled = true;
+
+            boulder.transform.position = boulder.transform.position + Vector3.up * .8f;
+
+            defaultRbMass = boulderRb.mass;
+            boulderRb.mass = 4f;
+
+            fixedJoint.connectedBody = boulderRb;
+        }
+    }
+
+    void UpdateRelease()
+    {
+        if (fixedJoint != null)
+        {
+            if (boulderRb != null)
+            {
+                boulderRb.mass = defaultRbMass;
+                boulderRb = null;
+            }
+
+            if (boulderOutline != null)
+            {
+                boulderOutline.OutlineColor = Color.cyan;
+                boulderOutline.OutlineWidth = 5f;
+                boulderOutline.enabled = false;
+            }
+
+            Destroy(fixedJoint);
+        }
+    }
+
 
     public GameObject CheckClosestObject()
     {
@@ -77,40 +138,5 @@ public class PlayerGrab : MonoBehaviour
             return closestHitCollider.gameObject;
         }
         return null;
-    }
-
-    void UpdateGrab()
-    {
-        IsGrabbing = true;
-
-        var boulder = CheckClosestObject();
-        fixedJoint = gameObject.AddComponent<FixedJoint>();
-
-        boulderRb = boulder.transform.GetComponent<Rigidbody>();
-        boulderOutline.OutlineColor = Color.green;
-        boulderOutline.OutlineWidth = 2f;
-        boulderOutline.enabled = true;
-
-        boulder.transform.position = boulder.transform.position + Vector3.up * .8f;
-
-        defaultRbMass = boulderRb.mass;
-        boulderRb.mass = 4f;
-
-        fixedJoint.connectedBody = boulderRb;
-    }
-
-    void UpdateRelease()
-    {
-        if (fixedJoint != null)
-        {
-            boulderRb.mass = defaultRbMass;
-            boulderRb = null;
-
-            boulderOutline.OutlineColor = Color.cyan;
-            boulderOutline.OutlineWidth = 5f;
-            boulderOutline.enabled = false;
-
-            Destroy(fixedJoint);
-        }
     }
 }

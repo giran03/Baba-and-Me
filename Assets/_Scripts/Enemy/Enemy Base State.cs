@@ -116,9 +116,11 @@ public abstract class EnemyBaseState
 
         if (CurrentContext._navMeshAgent.velocity.x > 1.2f)
             ChangeAnimation("run_side");
-        else if (CurrentContext._navMeshAgent.velocity.x < -1.2f)
+        if (CurrentContext._navMeshAgent.velocity.x < -1.2f)
             ChangeAnimation("run_side", true);
-        else if (CurrentContext._navMeshAgent.velocity.y != 0)
+        if (CurrentContext._navMeshAgent.velocity.y > 1.2f)
             ChangeAnimation("run_up");
+        if (CurrentContext._navMeshAgent.velocity.y < -1.2f)
+            ChangeAnimation("run_down");
     }
 }

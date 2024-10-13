@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Ranged Attack
   m_EditorClassIdentifier: 
   prefab: {fileID: 7412677565952715626, guid: e96e884d358561e4a9a09d12e0cc271e, type: 3}
-  AttackSpeed: 1.5
+  AttackSpeed: 4
   AttackDestroyTime: 2
-  CriticalDamage: 2
-  CriticalChance: 0.35
-  Damage: 45
+  CriticalDamage: 1.5
+  CriticalChance: 0.2
+  Damage: 30
   arrowForce: 7

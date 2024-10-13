@@ -113,7 +113,7 @@ public abstract class PlayerBaseState
         var x = Input.GetAxis("Horizontal");
         var y = Input.GetAxis("Vertical");
 
-        if (_currentAnimation.Contains("attack") || _currentAnimation.Contains("Idle"))
+        if (_currentAnimation.Contains("attack") || _currentAnimation.Contains("Idle") || _currentAnimation.Contains("Death"))
             return;
 
         if (x != 0 || y != 0)

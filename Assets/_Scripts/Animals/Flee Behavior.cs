@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class FleeBehavior : MonoBehaviour
 {
-    public List<Transform> threats; // List of threats to flee from
+    GameObject _player;
     private NavMeshAgent agent;
 
     [Header("Flee Configs")]
@@ -15,7 +15,6 @@ public class FleeBehavior : MonoBehaviour
     [SerializeField] float fleeDistance = 5f;
     [SerializeField] float walkSpeed = 5f;
     [SerializeField] float runSpeed = 9f;
-    [HideInInspector] public static bool isFleeing;
 
     [Header("Random Movement Configs")]
     [SerializeField] float range = 10f; //radius of sphere
@@ -26,8 +25,7 @@ public class FleeBehavior : MonoBehaviour
 
     void Start()
     {
-        var players = GameObject.FindGameObjectsWithTag("Player").ToList();
-        players.ForEach(x=>threats.Add(x.transform));
+        _player = GameObject.FindGameObjectWithTag("Player");
 
         agent = GetComponent<NavMeshAgent>();
 
@@ -36,45 +34,33 @@ public class FleeBehavior : MonoBehaviour
 
     void Update()
     {
-        isFleeing = IsThreatClose();
-
-        if (isFleeing)
+        if (IsThreatClose())
             FleeFromThreats();
         else
             Patrol();
 
         CheckAnimation();
-        Debug.Log($"isFleeing: {isFleeing}");
     }
 
     private bool IsThreatClose()
     {
-        foreach (Transform threat in threats)
-        {
-            if (threat.CompareTag("Player"))
-            {
-                if (threat != null && Vector3.Distance(transform.position, threat.position) <= fleeDetectionRadius)
-                    return true;
-            }
-        }
+        if (Vector3.Distance(transform.position, _player.transform.position) <= fleeDetectionRadius)
+            return true;
 
         return false;
     }
 
-    // TODO: IMPROVE THIS!!! | Destroy after flee; Respawn;
+    // TODO: IMPROVE THIS!!! | Destroy after flee; Respawn; if hit by an arrow;
     private void FleeFromThreats()
     {
         //get the closest threat
         Transform closestThreat = null;
         float closestDistance = float.MaxValue;
-        foreach (Transform threat in threats)
+        float distance = Vector3.Distance(transform.position, _player.transform.position);
+        if (distance < closestDistance)
         {
-            float distance = Vector3.Distance(transform.position, threat.position);
-            if (distance < closestDistance)
-            {
-                closestThreat = threat;
-                closestDistance = distance;
-            }
+            closestThreat = _player.transform;
+            closestDistance = distance;
         }
 
         //flee from the closest threat
@@ -117,7 +103,7 @@ public class FleeBehavior : MonoBehaviour
 
     void CheckAnimation()
     {
-        if (isFleeing)
+        if (IsThreatClose())
         {
             if (agent.velocity.x > 0)
                 ChangeAnimation("Run", false);

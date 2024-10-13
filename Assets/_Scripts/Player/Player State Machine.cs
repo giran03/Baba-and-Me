@@ -1,6 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class PlayerStateMachine : MonoBehaviour, IDamageable
 {
@@ -29,22 +33,22 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     float horizontalInput;
     float verticalInput;
 
-    // interaction
-    public bool IsInteracting { get; set; }
-
     // configs
     float _playerHealth;
 
     Rigidbody rb;
     Vector3 flatVel;
-    (Vector3, Quaternion) initialPosition;
 
     // state variables
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
 
+    // respawn
+    (Vector3, quaternion) InitialPosition;
+
     // public declarations
     public Vector3 moveDirection;
+    private bool isRespawning;
 
     public PlayerBaseState CurrentState { get => _currentState; set => _currentState = value; }
 
@@ -59,15 +63,20 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        initialPosition = (transform.position, transform.rotation);
+        InitialPosition = (transform.position, transform.rotation);
 
         // set defaults
         _playerHealth = PlayerConfigs.Instance.playerHealth;
         KeysInventory = new();
+
+        Time.timeScale = 1;
     }
 
     void Update()
     {
+        if (PlayerConfigs.Instance.IsGameOver) return;
+        if (isRespawning) return;
+
         // states
         _currentState.UpdateStates();
 
@@ -86,10 +95,11 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         MyInput();
         SpeedControl();
         MoveSpeedHandler();
-        // PlayerBounds();
 
         if (grounded)
             rb.drag = groundDrag;
+
+        CheckGameOver();
     }
 
     void FixedUpdate() => MovePlayer();
@@ -134,21 +144,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         }
     }
 
-    void PlayerBounds()
-    {
-        if (transform.position.y < -20)
-            RespawnPlayer();
-    }
-
-    void RespawnPlayer()
-    {
-        var (pos, rot) = initialPosition;
-        transform.SetPositionAndRotation(pos, rot);
-        rb.angularVelocity = Vector3.zero;
-        rb.velocity = Vector3.zero;
-        Physics.SyncTransforms();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         CurrentState.CurrentSubState.OnTriggerEnter(other);
@@ -157,7 +152,57 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public void Damage(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance)
     {
         _playerHealth -= damageAmount;
+        UpdateHealthBar();
+
         Debug.Log($"PALYER HEALTH REDUCED TO: {_playerHealth}");
+    }
+
+    void UpdateHealthBar()
+    {
+        PlayerConfigs.Instance.playerHealthBarImage.fillAmount = _playerHealth / 100f; //player max health = 100f
+    }
+
+    public void CheckGameOver()
+    {
+        if (_playerHealth <= 0)
+        {
+            // PlayerConfigs.Instance.IsGameOver = true;
+            if (isRespawning) return;
+
+            StartCoroutine(RespawnDelay());
+
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            GetComponent<NavMeshAgent>().enabled = false;
+            _currentState.ChangeAnimation("Death");
+            Debug.Log("GAME OVER");
+        }
+    }
+
+    IEnumerator RespawnDelay()
+    {
+        isRespawning = true;
+
+        yield return new WaitForSeconds(1.7f);
+
+        isRespawning = false;
+        RespawnPlayer();
+    }
+
+    void RespawnPlayer()
+    {
+        _playerHealth = 100f;
+        UpdateHealthBar();
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionY;
+        transform.SetPositionAndRotation(InitialPosition.Item1, InitialPosition.Item2);
+        _currentState.ChangeAnimation("Idle");
+        Physics.SyncTransforms();
+
+        GetComponent<NavMeshAgent>().enabled = true;
     }
 
     #region PUZZLE

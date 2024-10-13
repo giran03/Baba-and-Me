@@ -20,6 +20,13 @@ public class ArrowProjectile : MonoBehaviour
         if (other.TryGetComponent<IDamageable>(out var damageable))
         {
             damageable.Damage(attackStats.Damage, attackStats.CriticalDamage, attackStats.CriticalChance);
+            GetComponent<BoxCollider>().enabled = false;
+
+            Destroy(gameObject);
+            // attach to object
+            // var joint = gameObject.AddComponent<FixedJoint>();
+            // joint.connectedBody = other.attachedRigidbody;
         }
+        Destroy(gameObject);
     }
 }

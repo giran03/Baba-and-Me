@@ -15,7 +15,7 @@ public class EnemyStateMachine : MonoBehaviour
     [Header("Attack")]
     public GameObject attackPrefab;
 
-    [Header("Orc Animation")]
+    [Header("Animation")]
     public List<AnimatorController> AnimationList;
 
     [HideInInspector] public NavMeshAgent _navMeshAgent;
