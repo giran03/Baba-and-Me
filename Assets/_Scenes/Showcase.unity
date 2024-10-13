@@ -17082,16 +17082,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1182776205}
     m_Modifications:
-    - target: {fileID: 1864225708116821095, guid: 73d918e5bd0523c4b848d19cf2cc7f49,
-        type: 3}
-      propertyPath: m_Name
-      value: Health Bar
-      objectReference: {fileID: 0}
-    - target: {fileID: 3280850732506728983, guid: 73d918e5bd0523c4b848d19cf2cc7f49,
-        type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5750276171512559931, guid: 73d918e5bd0523c4b848d19cf2cc7f49,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17146,16 +17136,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Bear
-      objectReference: {fileID: 0}
-    - target: {fileID: 6192963222809870344, guid: 73d918e5bd0523c4b848d19cf2cc7f49,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6591071872153315147, guid: 73d918e5bd0523c4b848d19cf2cc7f49,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17337,11 +17317,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 285820987}
     m_Modifications:
-    - target: {fileID: 207738357690581746, guid: c82703870f6ea50429a3c78671bfb85f,
-        type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1492665287330984087, guid: c82703870f6ea50429a3c78671bfb85f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17396,16 +17371,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wolf
-      objectReference: {fileID: 0}
-    - target: {fileID: 4351163665102136588, guid: c82703870f6ea50429a3c78671bfb85f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8367077080319291310, guid: c82703870f6ea50429a3c78671bfb85f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
