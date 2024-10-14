@@ -14,4 +14,5 @@ public class AttackStats : ScriptableObject
     [MaxValue(1)]
     public float CriticalChance;
     public int Damage;
+    public float arrowForce;
 }

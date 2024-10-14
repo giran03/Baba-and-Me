@@ -1,23 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeerHandler : MonoBehaviour, IDamageable
 {
     [SerializeField] int _health = 100;
 
-    public DamageableStats.DamageMultiplier objectType;
-
+    GameObject _HealthBarImage;
     DamageableStats damageableStats;
 
     private void Start()
     {
-        damageableStats = new(gameObject, _health, objectType);
+        damageableStats = new(gameObject, _health, DamageableStats.DamageMultiplier.Normal);
+        _HealthBarImage = transform.GetChild(0).Find("Enemy Health").Find("HP Bar Border").gameObject;
+        _HealthBarImage.SetActive(false);
     }
 
     public void Damage(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance)
     {
-        damageableStats.Hit(damageAmount, weaponCriticalDamage, weaponCriticalChance);
+        Debug.Log($"PLAYER IS ATTACKING ME!!!");
+        damageableStats.Hit(damageAmount, weaponCriticalDamage, weaponCriticalChance, _HealthBarImage);
     }
 
     private void Update()

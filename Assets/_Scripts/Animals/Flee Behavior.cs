@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class FleeBehavior : MonoBehaviour
 {
-    public List<Transform> threats; // List of threats to flee from
+    GameObject _player;
     private NavMeshAgent agent;
 
     [Header("Flee Configs")]
@@ -14,7 +15,6 @@ public class FleeBehavior : MonoBehaviour
     [SerializeField] float fleeDistance = 5f;
     [SerializeField] float walkSpeed = 5f;
     [SerializeField] float runSpeed = 9f;
-    [HideInInspector] public static bool isFleeing;
 
     [Header("Random Movement Configs")]
     [SerializeField] float range = 10f; //radius of sphere
@@ -25,7 +25,7 @@ public class FleeBehavior : MonoBehaviour
 
     void Start()
     {
-        threats.Add(GameObject.FindGameObjectWithTag("Player").transform);
+        _player = GameObject.FindGameObjectWithTag("Player");
 
         agent = GetComponent<NavMeshAgent>();
 
@@ -34,56 +34,42 @@ public class FleeBehavior : MonoBehaviour
 
     void Update()
     {
-        isFleeing = IsThreatClose();
-
-        if (isFleeing)
+        if (IsThreatClose())
             FleeFromThreats();
         else
             Patrol();
 
         CheckAnimation();
-        Debug.Log($"isFleeing: {isFleeing}");
     }
 
     private bool IsThreatClose()
     {
-        foreach (Transform threat in threats)
-        {
-            if (threat.CompareTag("Player"))
-            {
-                if (threat != null && Vector3.Distance(transform.position, threat.position) <= fleeDetectionRadius)
-                    return true;
-            }
-        }
+        if (Vector3.Distance(transform.position, _player.transform.position) <= fleeDetectionRadius)
+            return true;
 
         return false;
     }
 
+    // TODO: IMPROVE THIS!!! | Destroy after flee; Respawn; if hit by an arrow;
     private void FleeFromThreats()
     {
-        Vector3 fleeDirection = Vector3.zero; // Initialize to zero
-
-        // Calculate average flee direction from all threats
-        foreach (Transform threat in threats)
+        //get the closest threat
+        Transform closestThreat = null;
+        float closestDistance = float.MaxValue;
+        float distance = Vector3.Distance(transform.position, _player.transform.position);
+        if (distance < closestDistance)
         {
-            if (threat.CompareTag("Player"))
-            {
-                if (threat != null)
-                    fleeDirection += transform.position - threat.position;
-            }
+            closestThreat = _player.transform;
+            closestDistance = distance;
         }
 
-        // Normalize the direction to avoid too strong pull
-        fleeDirection = fleeDirection.normalized;
+        //flee from the closest threat
+        Vector3 fleeDirection = (transform.position - closestThreat.position).normalized;
+        Vector3 fleePosition = transform.position + fleeDirection * fleeDistance;
 
-        Vector3 fleePosition = transform.position + fleeDirection * 15f;
-
-        NavMesh.SamplePosition(fleePosition, out NavMeshHit navHit, fleeDistance, NavMesh.AllAreas);
-        // move speed
+        // agent move speed
         agent.speed = runSpeed;
-        agent.SetDestination(navHit.position);
-
-        Debug.Log("Fleeing!");
+        agent.SetDestination(fleePosition);
     }
 
     void Patrol()
@@ -117,7 +103,7 @@ public class FleeBehavior : MonoBehaviour
 
     void CheckAnimation()
     {
-        if (isFleeing)
+        if (IsThreatClose())
         {
             if (agent.velocity.x > 0)
                 ChangeAnimation("Run", false);

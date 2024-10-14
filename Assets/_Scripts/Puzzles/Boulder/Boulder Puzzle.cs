@@ -29,12 +29,9 @@ public class BoulderPuzzle : MonoBehaviour
             BoulderPuzzleComplete = true;
             UnlockObjects();
             LockObjects();
-            RemoveTags(boulders);
             Debug.Log($"Puzzle Completed");
         }
     }
-
-    private void RemoveTags(List<GameObject> boulders) => boulders.ForEach(boulder => boulder.tag = "Untagged");
 
     private void OnTriggerEnter(Collider other)
     {

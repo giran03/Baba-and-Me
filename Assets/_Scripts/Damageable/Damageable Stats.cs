@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public interface IDamageable
 {
@@ -30,7 +31,7 @@ public class DamageableStats
         _health = health;
     }
 
-    public void Hit(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance)
+    public void Hit(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance, GameObject hpBar = null)
     {
         float multiplier = (float)_damageMultiplier * .1f;
 
@@ -68,6 +69,9 @@ public class DamageableStats
 
             SpawnDrop();
         }
+
+        if (hpBar != null)
+            UpdateHealthBar(hpBar);
     }
 
     void CriticalOccured()
@@ -81,6 +85,12 @@ public class DamageableStats
             yield return new WaitForSeconds(1f);
             Object.Destroy(criticalObject);
         }
+    }
+
+    void UpdateHealthBar(GameObject hpBar)
+    {
+        hpBar.SetActive(true);
+        hpBar.transform.Find("Health Bar").GetComponent<Image>().fillAmount = _health / 100f;
     }
 
     //TODO: CHANGE COLOR OR DO SOMETHING WHEN HIT!

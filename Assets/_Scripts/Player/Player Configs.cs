@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Handles the Player Sprite Animation
@@ -10,8 +11,10 @@ public class PlayerConfigs : MonoBehaviour
     public static PlayerConfigs Instance;
 
     [Header("General Configs")]
+    public Image playerHealthBarImage;
     public float playerHealth = 100;
     public GameObject ui_CriticalHitPrefab;
+    public bool IsGameOver {get; set;} = false;
 
     [Header("Player Attack")]
     public List<AttackStats> attackList = new();
@@ -21,8 +24,14 @@ public class PlayerConfigs : MonoBehaviour
     public float dashSpeed = 20f;
     public float invincibilityDuration = .5f;
 
-    [Header("Animation")]
+    [Header("Current Character")]
+    public bool isMisha;
+
+    [Header("Baba Animation")]
     public List<AnimatorController> playerAnimationList;
+
+    [Header("Misha Animation")]
+    public List<AnimatorController> MishaAnimationList;
 
     [Header("Drops")]
     public GameObject dropPrefab;

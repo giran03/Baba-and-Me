@@ -43,7 +43,7 @@ public class DropTrigger : MonoBehaviour
         if (isDetected)
         {
             Vector3 direction = (player.transform.position - transform.position).normalized;
-            GetComponent<Rigidbody>().AddForce(direction * 7f, ForceMode.Acceleration);
+            GetComponent<Rigidbody>().AddForce(direction * 15f, ForceMode.Acceleration);
         }
     }
 
