@@ -112,6 +112,15 @@ public class EnemyAttack : EnemyBaseState
         spawnedHitBox = Object.Instantiate(CurrentContext.attackPrefab, CurrentContext.transform.position + Vector3.forward * .5f, Quaternion.LookRotation(lookPos + Vector3.up * .3f, Vector3.up));
         yield return new WaitForSeconds(.4f);
 
+        // flip attack animation sprite if exists
+        if (spawnedHitBox.transform.childCount > 1)
+        {
+            if (lookPos.x < 0)
+                spawnedHitBox.transform.GetChild(1).GetComponentInChildren<SpriteRenderer>().flipX = true;
+            else
+                spawnedHitBox.transform.GetChild(1).GetComponentInChildren<SpriteRenderer>().flipX = false;
+        }
+
         ChangeAnimation("run");
         Object.Destroy(spawnedHitBox);
     }

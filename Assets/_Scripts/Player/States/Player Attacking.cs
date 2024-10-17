@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerAttacking : PlayerBaseState
@@ -39,7 +40,7 @@ public class PlayerAttacking : PlayerBaseState
     public override void UpdateState()
     {
         if (PlayerGrab.IsGrabbing) return;
-        
+
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, CurrentContext.groundLayer);
 
         if (_basicAttack != null)
@@ -49,17 +50,22 @@ public class PlayerAttacking : PlayerBaseState
         }
 
         if (Input.GetMouseButtonDown(0) && PlayerPrefs.GetString("isPlayerReadyToAttack") == "true")
-            Attack();
+            MeleeAttack();
+
+        if (!PlayerConfigs.Instance.isMisha) return;
+        if (Input.GetMouseButtonDown(1) && PlayerPrefs.GetString("isPlayerReadyToAttack_Ranged") == "true")
+            RangedAttack();
     }
 
-    void Attack()
+    void MeleeAttack()
     {
+        // seemless countdown for attack through different scripts;
         PlayerPrefs.SetString("isPlayerReadyToAttack", "false");
 
         AttackStats attackStats = PlayerConfigs.Instance.FindAttackObject("Basic Attack");
         _basicAttack = Object.Instantiate(attackStats.prefab, CurrentContext.transform.position, Quaternion.identity);
 
-        CurrentContext.StartCoroutine(AttackCooldown(attackStats.AttackSpeed));
+        CurrentContext.StartCoroutine(MeleeAttackCooldown(attackStats.AttackSpeed));
 
         _basicAttack.transform.Rotate(Vector3.right, -90f);
 
@@ -70,13 +76,55 @@ public class PlayerAttacking : PlayerBaseState
 
         CurrentContext.StartCoroutine(DestroyAttackObject(_basicAttack, attackStats.AttackDestroyTime));
         CurrentContext.StartCoroutine(DisableColliderAfterTime(0.1f));
+
+        HUDHandler.Instance.StartIconCooldown("Melee", attackStats.AttackSpeed);
     }
 
-    IEnumerator AttackCooldown(float duration)
+
+    void RangedAttack()
+    {
+        // seemless countdown for attack through different scripts;
+        PlayerPrefs.SetString("isPlayerReadyToAttack_Ranged", "false");
+
+        AttackStats attackStats = PlayerConfigs.Instance.FindAttackObject("Ranged Attack");
+        GameObject arrow = Object.Instantiate(attackStats.prefab, CurrentContext.transform.position + Vector3.up * .8f, Quaternion.identity);
+        Rigidbody arrowRb = arrow.GetComponent<Rigidbody>();
+
+        Vector3 direction = (hit.point + Vector3.up * .5f - CurrentContext.transform.position).normalized;
+
+        if (direction.x < 0)
+        {
+            arrow.GetComponentInChildren<SpriteRenderer>().flipX = true;
+            arrow.GetComponentInChildren<SpriteRenderer>().flipY = true;
+        }
+        else
+        {
+            arrow.GetComponentInChildren<SpriteRenderer>().flipX = false;
+            arrow.GetComponentInChildren<SpriteRenderer>().flipY = false;
+        }
+
+        arrow.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        arrowRb.AddForce(10f * attackStats.arrowForce * direction, ForceMode.Impulse);
+
+        CurrentContext.StartCoroutine(RangedAttackCooldown(attackStats.AttackSpeed));
+        CurrentContext.StartCoroutine(DestroyAttackObject(arrow, attackStats.AttackDestroyTime));
+
+        HUDHandler.Instance.StartIconCooldown("Ranged", attackStats.AttackSpeed);
+    }
+
+    IEnumerator MeleeAttackCooldown(float duration)
     {
         Debug.Log($"RELOADING ATTACK FOR {duration}!");
         yield return new WaitForSeconds(duration);
         PlayerPrefs.SetString("isPlayerReadyToAttack", "true");
+    }
+
+    IEnumerator RangedAttackCooldown(float duration)
+    {
+        Debug.Log($"RELOADING ATTACK FOR {duration}!");
+        yield return new WaitForSeconds(duration);
+        PlayerPrefs.SetString("isPlayerReadyToAttack_Ranged", "true");
     }
 
     IEnumerator DestroyAttackObject(GameObject attackObject, float duration)

@@ -16,7 +16,7 @@ public class PlayerIdle : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        ChangeAnimation("idle");
+        ChangeAnimation("Idle");
         CheckAnimation();
     }
 

@@ -20,10 +20,10 @@ public class EnemyPatrol : EnemyBaseState
     }
 
     public override void UpdateState()
-    {
+    { 
         CheckSwitchStates();
         Patrol();
-        
+
         CheckAnimation();
     }
 

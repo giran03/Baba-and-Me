@@ -17,4 +17,5 @@ MonoBehaviour:
   AttackDestroyTime: 0
   CriticalDamage: 1
   CriticalChance: 0
-  Damage: 10
+  Damage: 31
+  arrowForce: 0
