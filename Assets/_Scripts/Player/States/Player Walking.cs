@@ -21,10 +21,13 @@ public class PlayerWalking : PlayerBaseState
         CheckSwitchStates();
         CheckAnimation();
 
+        if (PlayerGrab.IsGrabbing) return;
+
         if (Input.GetKeyDown(KeyCode.Space) && _dashCooldown <= 0)
         {
             _dashCooldown = 0.5f;
             CurrentContext.StartCoroutine(Dash());
+            HUDHandler.Instance.StartIconCooldown("Dash", _dashCooldown);
             Debug.Log($"DASHING~!");
         }
 
