@@ -9,6 +9,7 @@ public class EnemyAttack : EnemyBaseState
 {
     Vector3 chasePoint;
     GameObject spawnedHitBox;
+    private bool readyToChase = true;
 
     public EnemyAttack(EnemyStateMachine currentContext, EnemyStateFactory factory) : base(currentContext, factory)
     {
@@ -37,6 +38,7 @@ public class EnemyAttack : EnemyBaseState
     public override void UpdateState()
     {
         MoveEnemy();
+
         CheckAnimation();
     }
 
