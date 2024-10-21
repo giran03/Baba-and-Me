@@ -14,7 +14,7 @@ public class PlayerConfigs : MonoBehaviour
     public Image playerHealthBarImage;
     public float playerHealth = 100;
     public GameObject ui_CriticalHitPrefab;
-    public bool IsGameOver {get; set;} = false;
+    public bool IsGameOver { get; set; } = false;
 
     [Header("Player Attack")]
     public List<AttackStats> attackList = new();
@@ -37,6 +37,19 @@ public class PlayerConfigs : MonoBehaviour
     public GameObject dropPrefab;
     public float dropRadius;
     public float dropDetectionRadius;
+
+    [Header("SFX")]
+    // attack
+    public Sound[] bowSFX;
+    public Sound[] normalSlashSFX;
+    public Sound[] criticalSlashSFX;
+
+    // puzzle
+    public Sound[] boulderSFX;
+
+    //movement
+    public Sound[] dashSFX;
+    public Sound gravelFootstepsSFX;
 
     // references
     public AttackTypes attackTypes;

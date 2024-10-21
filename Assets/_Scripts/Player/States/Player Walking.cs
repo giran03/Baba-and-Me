@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerWalking : PlayerBaseState
 {
     float _dashCooldown;
+    private bool isFootstepsOnCd;
 
     public PlayerWalking(PlayerStateMachine context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory)
     {
@@ -21,6 +22,10 @@ public class PlayerWalking : PlayerBaseState
         CheckSwitchStates();
         CheckAnimation();
 
+        //sfx
+        if (!isFootstepsOnCd)
+            CurrentContext.StartCoroutine(PlayFootsteps());
+
         if (PlayerGrab.IsGrabbing) return;
 
         if (Input.GetKeyDown(KeyCode.Space) && _dashCooldown <= 0)
@@ -32,6 +37,14 @@ public class PlayerWalking : PlayerBaseState
         }
 
         _dashCooldown -= Time.deltaTime;
+    }
+
+    IEnumerator PlayFootsteps()
+    {
+        isFootstepsOnCd = true;
+        PlayerConfigs.Instance.gravelFootstepsSFX.PlayWithRandomPitch(CurrentContext.transform.position);
+        yield return new WaitForSeconds(.5f);
+        isFootstepsOnCd = false;
     }
 
     public override void ExitState()
@@ -61,6 +74,9 @@ public class PlayerWalking : PlayerBaseState
         Vector3 direction = Vector3.zero;
         var x = Input.GetAxis("Horizontal");
         var y = Input.GetAxis("Vertical");
+
+        //sfx
+        PlayerConfigs.Instance.dashSFX[Random.Range(0, PlayerConfigs.Instance.dashSFX.Length)].Play(CurrentContext.transform.position);
 
         if (x != 0 || y != 0)
         {

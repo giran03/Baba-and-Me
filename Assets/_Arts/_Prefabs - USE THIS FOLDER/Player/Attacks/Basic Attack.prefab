@@ -188,6 +188,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackName: Basic Attack
+  attackSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 754b40f6a2394324690a1ecb2aa9e1aa,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 20
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 58c9a090bf6aa74468de9c6e2e49546b,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 20
 --- !u!1 &5083419295512343798
 GameObject:
   m_ObjectHideFlags: 0

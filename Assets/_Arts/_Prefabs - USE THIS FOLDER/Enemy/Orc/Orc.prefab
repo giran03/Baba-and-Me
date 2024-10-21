@@ -209,6 +209,7 @@ MonoBehaviour:
   attackRate: 2.5
   attackPrefab: {fileID: 4694023567057821666, guid: 4175854f57360d548a36354ecc1ae52e,
     type: 3}
+  enemyAttackType: 1
   AnimationList:
   - {fileID: 9100000, guid: 07d5a4bf709818249b22865a68b20bda, type: 2}
   - {fileID: 9100000, guid: af57a42c57421394bbe268bc4bcd0f78, type: 2}
