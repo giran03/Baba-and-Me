@@ -6,6 +6,7 @@ public class ArrowProjectile : MonoBehaviour
 {
     [Tooltip("Name of the ATTACK TYPE; Must be existing in Player Configs!")]
     public string attackName;
+    public Sound arrowHitSFX;
     AttackStats attackStats;
 
     private void Start()
@@ -27,6 +28,8 @@ public class ArrowProjectile : MonoBehaviour
             // var joint = gameObject.AddComponent<FixedJoint>();
             // joint.connectedBody = other.attachedRigidbody;
         }
+
+        arrowHitSFX.Play(transform.position);
         Destroy(gameObject);
     }
 }

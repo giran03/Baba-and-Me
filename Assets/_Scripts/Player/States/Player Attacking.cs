@@ -8,34 +8,13 @@ public class PlayerAttacking : PlayerBaseState
     GameObject _basicAttack;
     RaycastHit hit;
 
-    public PlayerAttacking(PlayerStateMachine currentContext, PlayerStateFactory factory) : base(currentContext, factory)
-    {
-    }
+    public PlayerAttacking(PlayerStateMachine currentContext, PlayerStateFactory factory) : base(currentContext, factory) { }
 
-    public override void CheckSwitchStates()
-    {
-
-    }
-
-    public override void EnterState()
-    {
-
-    }
-
-    public override void ExitState()
-    {
-
-    }
-
-    public override void InitializeSubState()
-    {
-
-    }
-
-    public override void OnTriggerEnter(Collider other)
-    {
-
-    }
+    public override void CheckSwitchStates() { }
+    public override void EnterState() { }
+    public override void ExitState() { }
+    public override void InitializeSubState() { }
+    public override void OnTriggerEnter(Collider other) { }
 
     public override void UpdateState()
     {
@@ -85,6 +64,9 @@ public class PlayerAttacking : PlayerBaseState
     {
         // seemless countdown for attack through different scripts;
         PlayerPrefs.SetString("isPlayerReadyToAttack_Ranged", "false");
+
+        //sfx
+        PlayerConfigs.Instance.bowSFX[Random.Range(0, PlayerConfigs.Instance.bowSFX.Length)].Play(CurrentContext.transform.position);
 
         AttackStats attackStats = PlayerConfigs.Instance.FindAttackObject("Ranged Attack");
         GameObject arrow = Object.Instantiate(attackStats.prefab, CurrentContext.transform.position + Vector3.up * .8f, Quaternion.identity);
