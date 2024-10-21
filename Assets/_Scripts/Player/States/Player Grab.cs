@@ -72,6 +72,9 @@ public class PlayerGrab : MonoBehaviour
         if (CheckClosestObject() == null) return;
         IsGrabbing = true;
 
+        //sfx
+        PlayerConfigs.Instance.boulderSFX[0].Play(transform.position);
+
         var boulder = CheckClosestObject();
         fixedJoint = gameObject.AddComponent<FixedJoint>();
 
@@ -108,6 +111,8 @@ public class PlayerGrab : MonoBehaviour
                 boulderOutline.enabled = false;
             }
 
+            //sfx
+            PlayerConfigs.Instance.boulderSFX[1].Play(transform.position);
             Destroy(fixedJoint);
         }
     }

@@ -44,6 +44,9 @@ public class DamageableStats
 
             Debug.Log($"CRITICAL HIT!: {damageAmount * multiplier * weaponCriticalDamage}");
             Debug.Log($"random value of: {random} with chance: {weaponCriticalChance}");
+
+            PlayerConfigs.Instance.criticalSlashSFX[Random.Range(0, PlayerConfigs.Instance.criticalSlashSFX.Length)]
+                        .Play(GameObject.FindWithTag("Player").GetComponent<PlayerStateMachine>().CurrentState.CurrentContext.transform.position);
         }
         else
             _health -= (int)(damageAmount * multiplier);

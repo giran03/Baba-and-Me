@@ -278,6 +278,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackName: Ranged Attack
+  arrowHitSFX:
+    <Audio>k__BackingField: {fileID: 8300000, guid: 2cad5996941e0934dadc75e21f475cc4,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 120
 --- !u!135 &2665414315286181599
 SphereCollider:
   m_ObjectHideFlags: 0
