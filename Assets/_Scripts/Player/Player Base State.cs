@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Unity.Collections;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public abstract class PlayerBaseState

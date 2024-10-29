@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,7 +15,7 @@ public class EnemyStateMachine : MonoBehaviour
     public GameObject attackPrefab;
 
     [Header("Animation")]
-    public List<AnimatorController> AnimationList;
+    public List<RuntimeAnimatorController > AnimationList;
 
     [HideInInspector] public NavMeshAgent _navMeshAgent;
     [HideInInspector] public bool isAttacking;

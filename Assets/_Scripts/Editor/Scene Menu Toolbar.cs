@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class SceneMenuToolbar : MonoBehaviour
+public class SceneMenuToolbar
 {
     [MenuItem("Level Loader/Load Showcase #&1")]
     public static void LoadMainMenu()

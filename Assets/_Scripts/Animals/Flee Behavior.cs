@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,13 +19,12 @@ public class FleeBehavior : MonoBehaviour
     [SerializeField] float range = 10f; //radius of sphere
 
     [Header("Random Movement Configs")]
-    [SerializeField] List<AnimatorController> deerAnimations;
+    [SerializeField] List<RuntimeAnimatorController > deerAnimations;
     string _currentAnimation = "";
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
-
         agent = GetComponent<NavMeshAgent>();
 
         ChangeAnimation("Idle", false, .4f);

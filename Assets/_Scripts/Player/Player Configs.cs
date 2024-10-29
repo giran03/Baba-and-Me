@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,10 +27,10 @@ public class PlayerConfigs : MonoBehaviour
     public bool isMisha;
 
     [Header("Baba Animation")]
-    public List<AnimatorController> playerAnimationList;
+    public List<RuntimeAnimatorController> playerAnimationList;
 
     [Header("Misha Animation")]
-    public List<AnimatorController> MishaAnimationList;
+    public List<RuntimeAnimatorController> MishaAnimationList;
 
     [Header("Drops")]
     public GameObject dropPrefab;
