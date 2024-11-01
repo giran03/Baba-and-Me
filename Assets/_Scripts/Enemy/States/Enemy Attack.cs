@@ -10,6 +10,7 @@ public class EnemyAttack : EnemyBaseState
     Vector3 chasePoint;
     GameObject spawnedHitBox;
     private bool readyToChase = true;
+    bool _hasPlayedFleeSound;
 
     public EnemyAttack(EnemyStateMachine currentContext, EnemyStateFactory factory) : base(currentContext, factory)
     {
@@ -29,6 +30,8 @@ public class EnemyAttack : EnemyBaseState
                 if (PlayerPrefs.GetString($"{CurrentContext.name}_isEnemyReadyToAttack") == "false")
                     yield return new WaitUntil(() => PlayerPrefs.GetString($"{CurrentContext.name}_isEnemyReadyToAttack") == "true");
 
+                //sfx
+                PlaySFX();
                 CurrentContext.StartCoroutine(SpawnHitbox());
                 CurrentContext.StartCoroutine(AttackCooldown(CurrentContext.attackRate));
             }
@@ -37,6 +40,7 @@ public class EnemyAttack : EnemyBaseState
 
     public override void UpdateState()
     {
+        // CheckSwitchStates();
         MoveEnemy();
 
         CheckAnimation();
@@ -54,7 +58,8 @@ public class EnemyAttack : EnemyBaseState
 
     public override void CheckSwitchStates()
     {
-
+        // if (PlayerStateMachine.isRespawning)
+        //     SwitchState(Factory.EnemyPatrol());
     }
 
     public override void OnTriggerEnter(Collider other)
@@ -123,7 +128,8 @@ public class EnemyAttack : EnemyBaseState
                 spawnedHitBox.transform.GetChild(1).GetComponentInChildren<SpriteRenderer>().flipX = false;
         }
 
-        ChangeAnimation("run");
+        ChangeAnimation("run_side", true);
+        CheckAnimation();
         Object.Destroy(spawnedHitBox);
     }
 
@@ -149,4 +155,43 @@ public class EnemyAttack : EnemyBaseState
                 chasePoint = _player.position + (Quaternion.Euler(0, Random.Range(-180f, 180f), 0) * direction * 5f);
         }
     }
+    #region SFX
+
+    Sound[] soundArrToUse;
+
+    void PlaySFX()
+    {
+        if (!_hasPlayedFleeSound)
+            if (CurrentContext.TryGetComponent<BearHandler>(out var bear))
+                CurrentContext.StartCoroutine(PlayWithCooldown(bear));
+            else if (CurrentContext.TryGetComponent<WolfHandler>(out var wolf))
+                CurrentContext.StartCoroutine(PlayWithCooldown(wolf));
+            else if (CurrentContext.TryGetComponent<OrcBasic>(out var orcBasic))
+                CurrentContext.StartCoroutine(PlayWithCooldown(orcBasic));
+    }
+
+    IEnumerator PlayWithCooldown<T>(T component) where T : MonoBehaviour
+    {
+        switch (component)
+        {
+            case BearHandler:
+                soundArrToUse = CurrentContext.GetComponent<BearHandler>().bearSFX;
+                soundArrToUse[1].PlayWithRandomPitch(CurrentContext.transform.position);
+                break;
+            case WolfHandler:
+                soundArrToUse = CurrentContext.GetComponent<WolfHandler>().wolfSFX;
+                soundArrToUse[1].PlayWithRandomPitch(CurrentContext.transform.position);
+                break;
+            case OrcBasic:
+                soundArrToUse = CurrentContext.GetComponent<OrcBasic>().orcBasicSFX;
+                soundArrToUse[1].PlayWithRandomPitch(CurrentContext.transform.position);
+                break;
+        }
+
+        yield return new WaitForSeconds(soundArrToUse[1].Audio.length);
+
+        soundArrToUse = null;
+        _hasPlayedFleeSound = false;
+    }
+    #endregion
 }

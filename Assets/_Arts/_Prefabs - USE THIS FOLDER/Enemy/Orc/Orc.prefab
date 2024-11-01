@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 3230293857585686336}
   - component: {fileID: 8919529201020943761}
   - component: {fileID: 9028844513723888784}
+  - component: {fileID: -1990424730896065399}
   m_Layer: 7
   m_Name: Orc
   m_TagString: Orc
@@ -204,16 +205,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec33658ebfff1149b4c99da9df80ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolRadius: 5
-  detectionRadius: 7
+  patrolRadius: 3
+  detectionRadius: 13
   attackRate: 2.5
   attackPrefab: {fileID: 4694023567057821666, guid: 4175854f57360d548a36354ecc1ae52e,
     type: 3}
-  enemyAttackType: 1
   AnimationList:
   - {fileID: 9100000, guid: 07d5a4bf709818249b22865a68b20bda, type: 2}
   - {fileID: 9100000, guid: af57a42c57421394bbe268bc4bcd0f78, type: 2}
-  - {fileID: 9100000, guid: e668b1675c592f54f8891c93462d4e07, type: 2}
+  - {fileID: 9100000, guid: 8390e23d9ffb93f42a82fa410bb58ee9, type: 2}
   - {fileID: 9100000, guid: aa9a486016d8d884eb71530b9f1087c5, type: 2}
   _navMeshAgent: {fileID: 0}
   isAttacking: 0
@@ -230,6 +230,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
+  customDrop: {fileID: 2587291607013881087, guid: 591689e67a15d064fa73fc92cfe5a2e6,
+    type: 3}
+  orcBasicSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 5766f9201b32c9046a888c34ba87bf54,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 75
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 353f0a68436e84046b0d70936e5eef1c,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 75
+  damageMultiplier: 10
+  attachedObject: {fileID: 0}
+--- !u!136 &-1990424730896065399
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8619840899532322796}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8696575238515303979
 GameObject:
   m_ObjectHideFlags: 0

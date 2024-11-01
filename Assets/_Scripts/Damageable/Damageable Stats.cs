@@ -9,12 +9,13 @@ public interface IDamageable
 
 public class DamageableStats
 {
-    int _health;
+    float _health;
+    float _maxHealth;
     GameObject _currentObect;
     public DamageMultiplier _damageMultiplier;
     float spriteColorTimer = .2f;
     bool isAttacked;
-    bool IsDrop { get; set; }
+    DropSpawner dropSpawner = new();
 
     public enum DamageMultiplier    // 100 = 10% , 10 = 1% , 5 = 0.5%
     {
@@ -23,15 +24,15 @@ public class DamageableStats
         Tanky = 3,
     }
 
-
-    public DamageableStats(GameObject currentObject, int health, DamageMultiplier damageMultiplier)
+    public DamageableStats(GameObject currentObject, float health, float maxHealth, DamageMultiplier damageMultiplier)
     {
         _damageMultiplier = damageMultiplier;
         _currentObect = currentObject;
         _health = health;
+        _maxHealth = maxHealth;
     }
 
-    public void Hit(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance, GameObject hpBar = null)
+    public void Hit(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance, int dropCount, GameObject hpBar = null, GameObject customDrop = null)
     {
         float multiplier = (float)_damageMultiplier * .1f;
 
@@ -42,8 +43,8 @@ public class DamageableStats
 
             CriticalOccured();
 
-            Debug.Log($"CRITICAL HIT!: {damageAmount * multiplier * weaponCriticalDamage}");
-            Debug.Log($"random value of: {random} with chance: {weaponCriticalChance}");
+            // Debug.Log($"CRITICAL HIT!: {damageAmount * multiplier * weaponCriticalDamage}");
+            // Debug.Log($"random value of: {random} with chance: {weaponCriticalChance}");
 
             PlayerConfigs.Instance.criticalSlashSFX[Random.Range(0, PlayerConfigs.Instance.criticalSlashSFX.Length)]
                         .Play(GameObject.FindWithTag("Player").GetComponent<PlayerStateMachine>().CurrentState.CurrentContext.transform.position);
@@ -51,26 +52,28 @@ public class DamageableStats
         else
             _health -= (int)(damageAmount * multiplier);
 
-        Debug.Log($"Damage: {damageAmount * multiplier}");
-        Debug.Log($"Multiplier: {multiplier}");
-        Debug.Log($"Health: {_health}");
+        // Debug.Log($"Damage: {damageAmount * multiplier}");
+        // Debug.Log($"Multiplier: {multiplier}");
+        // Debug.LogError($"current object {_currentObect.name} | Health: {_health}");
 
-        if (_currentObect.transform.childCount > 0)
-        {
-            _currentObect.transform.GetChild(0).TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer);
-            if (spriteRenderer != null)
+        if (_currentObect != null)
+            if (_currentObect.transform.childCount > 0)
             {
-                spriteRenderer.material.color = Color.red;
-                isAttacked = true;
+                _currentObect.transform.GetChild(0).TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer);
+                if (spriteRenderer != null)
+                {
+                    spriteRenderer.material.color = Color.red;
+                    isAttacked = true;
+                }
             }
-        }
 
         if (_health <= 0)
         {
-            Object.Destroy(_currentObect);
-            _currentObect.SetActive(false);
+            // spawn drops at destroy
+            if (_currentObect != null)
+                dropSpawner.SpawnClusterDrop(_currentObect, dropCount, customDrop);
 
-            SpawnDrop();
+            Object.Destroy(_currentObect);
         }
 
         if (hpBar != null)
@@ -93,7 +96,7 @@ public class DamageableStats
     void UpdateHealthBar(GameObject hpBar)
     {
         hpBar.SetActive(true);
-        hpBar.transform.Find("Health Bar").GetComponent<Image>().fillAmount = _health / 100f;
+        hpBar.transform.Find("Health Bar").GetComponent<Image>().fillAmount = _health / _maxHealth;
     }
 
     //TODO: CHANGE COLOR OR DO SOMETHING WHEN HIT!
@@ -109,35 +112,5 @@ public class DamageableStats
         }
         else
             spriteColorTimer -= Time.deltaTime;
-    }
-
-
-    void SpawnDrop()
-    {
-        var defaultSpawn = _currentObect.transform.position + Vector3.up * .5f;
-
-        GameObject drop = Object.Instantiate(PlayerConfigs.Instance.dropPrefab, defaultSpawn, Quaternion.identity);
-
-        drop.transform.LookAt(GetRandomPointInRadius(PlayerConfigs.Instance.dropRadius), Vector3.up);
-        drop.GetComponent<Rigidbody>().AddForce(drop.transform.forward * 2.5f, ForceMode.Impulse);
-    }
-
-    public Vector3 GetRandomPointInRadius(float radius)
-    {
-        Vector3 pointAboveTerrain;
-        RaycastHit hit;
-        do
-        {
-            float randomX = Random.Range(-radius, radius);
-            float randomZ = Random.Range(-radius, radius);
-
-            pointAboveTerrain = _currentObect.transform.position + new Vector3(randomX, 100, randomZ);
-
-        } while (Physics.Raycast(pointAboveTerrain, Vector3.down, out hit, 200f, LayerMask.GetMask("Terrain")) == false);
-
-        Vector3 targetPoint = hit.point;
-        targetPoint.y += 4f;   // offset from ground
-
-        return targetPoint;
     }
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7422090117016370540}
   - component: {fileID: 2064439543820698649}
   - component: {fileID: 3886746876994796115}
+  - component: {fileID: 8951707617939360175}
   m_Layer: 7
   m_Name: Deer
   m_TagString: Animal
@@ -94,6 +95,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
+  customDrop: {fileID: 2587291607013881087, guid: 85d5404d4ae67cf4c9eb3a197bd64b77,
+    type: 3}
+  deerSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 8e3f608b514a8914eae20a1a4c582f33,
+      type: 3}
+    <Volume>k__BackingField: 0.5
+    <Range>k__BackingField: 100
+  - <Audio>k__BackingField: {fileID: 8300000, guid: cfe35354e8418be45b47e12ec3d5f6dd,
+      type: 3}
+    <Volume>k__BackingField: 0.171
+    <Range>k__BackingField: 100
+  attachedObject: {fileID: 0}
 --- !u!54 &2064439543820698649
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -144,6 +157,29 @@ CapsuleCollider:
   m_Height: 2.0329819
   m_Direction: 1
   m_Center: {x: 0.041319847, y: 1.1905215, z: 0}
+--- !u!136 &8951707617939360175
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840577011396279597}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.7
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.05, z: 0}
 --- !u!1 &2750914988902364911
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4315038058382958747}
   - component: {fileID: 5351241376802062060}
   - component: {fileID: 3468763204652194470}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: polar_bear_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 7243439019724926967}
   - component: {fileID: 9075155813525277495}
   - component: {fileID: 1790808144221596095}
+  - component: {fileID: 5466095269426409288}
   m_Layer: 0
   m_Name: Bear
   m_TagString: Untagged
@@ -265,7 +266,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3e7636489401742ad924176b1a7653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
+  _health: 250
+  bearSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 12973e4d39076f74dab61b605bff1504,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 75
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 32d623c04d688944dbeaef700b81672f,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 75
+--- !u!136 &5466095269426409288
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6192963222809870344}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &8166253039996235180
 PrefabInstance:
   m_ObjectHideFlags: 0

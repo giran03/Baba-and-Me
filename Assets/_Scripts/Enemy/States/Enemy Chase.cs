@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class EnemyChase : EnemyBaseState
 {
+    Transform _player;
+
     public EnemyChase(EnemyStateMachine currentContext, EnemyStateFactory factory) : base(currentContext, factory)
     {
         IsRootState = true;
@@ -15,14 +17,14 @@ public class EnemyChase : EnemyBaseState
     {
         // PlayerPrefs.SetString($"{CurrentContext.name}_isEnemyReadyToAttack", "true");
         Debug.Log($"CHASING ~");
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     public override void UpdateState()
     {
         CheckSwitchStates();
 
-        Transform _player = GameObject.FindGameObjectWithTag("Player").transform;
-        ChasePlayer(_player);
+        ChasePlayer();
 
         CheckAnimation();
     }
@@ -55,8 +57,9 @@ public class EnemyChase : EnemyBaseState
 
     }
 
-    void ChasePlayer(Transform _player)
+    void ChasePlayer()
     {
+        Debug.LogError($"CHASING PLAYER!");
         var lookPos = _player.position - CurrentContext.transform.position;
         lookPos.y = 0;
         var rotation = Quaternion.LookRotation(lookPos);

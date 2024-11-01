@@ -9,6 +9,9 @@ TagManager:
   - Key
   - Orc
   - Animal
+  - XP Drop
+  - Health Drop
+  - Power Drop
   layers:
   - Default
   - TransparentFX

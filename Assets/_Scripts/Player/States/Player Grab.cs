@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerGrab : MonoBehaviour
@@ -9,6 +10,7 @@ public class PlayerGrab : MonoBehaviour
     Rigidbody boulderRb;
     FixedJoint fixedJoint;
     Outline boulderOutline;
+    TMP_Text infoText;
     bool isGrabOnCooldown;
 
     void Update()
@@ -17,7 +19,8 @@ public class PlayerGrab : MonoBehaviour
 
         if (closestObject != null)
         {
-            boulderOutline = closestObject.GetComponent<Outline>();
+            boulderOutline = closestObject.GetComponentInChildren<Outline>();
+            infoText = closestObject.GetComponentInChildren<TMP_Text>();
 
             if (!IsGrabbing)
             {
@@ -26,6 +29,8 @@ public class PlayerGrab : MonoBehaviour
                     boulderOutline.OutlineColor = Color.cyan;
                     boulderOutline.OutlineWidth = 5f;
                     boulderOutline.enabled = true;
+
+                    infoText.enabled = true;
                 }
             }
         }
@@ -35,6 +40,9 @@ public class PlayerGrab : MonoBehaviour
             {
                 boulderOutline.enabled = false;
                 boulderOutline = null;
+
+                infoText.enabled = false;
+                infoText = null;
             }
         }
 
@@ -42,11 +50,6 @@ public class PlayerGrab : MonoBehaviour
         {
             UpdateGrab();
         }
-        // else
-        // {
-        //     UpdateRelease();
-        //     StartCoroutine(GrabbingCooldown());
-        // }
 
         if (Input.GetKeyUp(KeyCode.E))
         {

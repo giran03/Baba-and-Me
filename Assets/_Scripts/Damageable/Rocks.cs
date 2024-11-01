@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Rocks : MonoBehaviour, IDamageable
 {
-    [SerializeField] int _health = 100;
+    [SerializeField] float _health = 100;
 
     public DamageableStats.DamageMultiplier objectType;
 
@@ -10,12 +10,12 @@ public class Rocks : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        damageableStats = new(gameObject, _health, objectType);
+        damageableStats = new(gameObject, _health, _health, objectType);
     }
 
     public void Damage(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance)
     {
-        damageableStats.Hit(damageAmount, weaponCriticalDamage, weaponCriticalChance);
+        damageableStats.Hit(damageAmount, weaponCriticalDamage, weaponCriticalChance, Random.Range(1,4));
     }
 
     private void Update()

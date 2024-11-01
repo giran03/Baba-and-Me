@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Search.Providers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,6 +46,9 @@ public class HUDHandler : MonoBehaviour
         rangedAttackCooldownIcon.gameObject.SetActive(false);
         dashCooldownIcon.gameObject.SetActive(false);
         grabCooldownIcon.gameObject.SetActive(false);
+
+        if (!PlayerConfigs.Instance.isMisha)
+            rangedAttackCooldownIcon.gameObject.SetActive(true);
     }
 
     public void StartIconCooldown(string iconName, float fillAmount)

@@ -180,7 +180,7 @@ Transform:
   m_GameObject: {fileID: 4193708740806847938}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9000001, z: 0}
+  m_LocalPosition: {x: 0, y: -0.189, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -206,7 +206,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0052c18478a9ba343b96fe02e20760cf, type: 2}
+  - {fileID: 2100000, guid: 62cf8fd7ca6e58c48b968701636a26f6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -227,7 +227,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 77e990f320a67b04aaf7d9242fb57e5e, type: 2}
+  m_Sprite: {fileID: 40542577, guid: c5c5fe105a9805641978428701d5aff6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -286,13 +286,15 @@ GameObject:
   - component: {fileID: 5695612767494078769}
   - component: {fileID: 7907316788024618376}
   - component: {fileID: 5489695862822298224}
+  - component: {fileID: 5184942126003698659}
+  - component: {fileID: 5536955093924786556}
   m_Layer: 6
   m_Name: Baba
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7106786678140863473
 Transform:
   m_ObjectHideFlags: 0
@@ -358,7 +360,7 @@ MonoBehaviour:
   playerHeight: 0.3
   groundLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 1032
   KeysInventory: []
   orientation: {fileID: 1600606981551264912}
   moveDirection: {x: 0, y: 0, z: 0}
@@ -471,6 +473,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dece23c9d8ce42543a15520129bd0721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!81 &5184942126003698659
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6200187581798980465}
+  m_Enabled: 1
+--- !u!114 &5536955093924786556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6200187581798980465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724b1d8accb7c9f4eb324fd95e28c6f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioListener: {fileID: 5184942126003698659}
 --- !u!1 &8940177637721929834
 GameObject:
   m_ObjectHideFlags: 0

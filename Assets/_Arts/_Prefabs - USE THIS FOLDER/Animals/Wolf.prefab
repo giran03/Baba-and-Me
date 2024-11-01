@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9097719078463041456}
   - component: {fileID: 4994928267100376133}
   - component: {fileID: 2463890049769685216}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wolf_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 1786771503530490828}
   - component: {fileID: 4558153173288794963}
   - component: {fileID: 2131111327987894639}
+  - component: {fileID: 8944593441112436331}
   m_Layer: 0
   m_Name: Wolf
   m_TagString: Untagged
@@ -266,6 +267,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
+  wolfSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 31a6e412cb23e924a80f38e6d934b208,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 75
+  - <Audio>k__BackingField: {fileID: 8300000, guid: d282c7f1669e49b4781b9dcdceed5df6,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 75
+--- !u!136 &8944593441112436331
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4351163665102136588}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &6787416583105406281
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -279,10 +312,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy Health
       objectReference: {fileID: 0}
+    - target: {fileID: 3038921693178989287, guid: ca94f1646e2ddd443a132598016450cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7533207951018404299, guid: ca94f1646e2ddd443a132598016450cc,
         type: 3}
       propertyPath: m_Name
       value: Health Bar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7533207951018404299, guid: ca94f1646e2ddd443a132598016450cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7853792479030588165, guid: ca94f1646e2ddd443a132598016450cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9176818960334012469, guid: ca94f1646e2ddd443a132598016450cc,
         type: 3}
