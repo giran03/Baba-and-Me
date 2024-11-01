@@ -23,6 +23,7 @@ public class PlayerConfigs : MonoBehaviour
     public GameObject heartIconPrefab;
     public Image playerHealthBarImage;
     public Image playerPowerBarImage;
+    public GameObject escapeMenuOverlay;
 
     public int _livesRemaining = 3;
 
@@ -85,6 +86,16 @@ public class PlayerConfigs : MonoBehaviour
             Destroy(Instance);
         else
             Instance = this;
+    }
+
+    private void Start() => escapeMenuOverlay.SetActive(false);
+
+    private void Update()
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseManager.PauseGame();
+            escapeMenuOverlay.SetActive(true);
+        }
     }
 
     public AttackStats FindAttackObject(string attackName)

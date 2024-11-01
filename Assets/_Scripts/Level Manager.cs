@@ -32,6 +32,11 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void ReturnToMainMenu()
+    {
+        MusicManager.Instance.PlayMusic("mainMenu");
+        SceneManager.LoadScene("MainMenu");
+    }
     public void ChangeScene(string sceneName) => SceneManager.LoadScene(sceneName);
     public string GetCurrentLevel() => SceneManager.GetActiveScene().name;
     public void RestartCurrentLevel() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
