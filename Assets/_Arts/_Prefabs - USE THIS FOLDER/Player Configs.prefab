@@ -1,0 +1,172 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1715083352249088491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5181429903586391417}
+  - component: {fileID: 103826099756244461}
+  m_Layer: 0
+  m_Name: Player Configs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5181429903586391417
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715083352249088491}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.7567386, y: 0.49999973, z: -4.7564044}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &103826099756244461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715083352249088491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9370e06b68a035a4d92ff00783ca300b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: 100
+  playerPower: 100
+  ui_CriticalHitPrefab: {fileID: 117997717113117020, guid: 14876f270c642c34896d4a3d4a420bf3,
+    type: 3}
+  spriteDistanceToUpdate: 20
+  keyIconHolder: {fileID: 0}
+  KeyIconPrefab: {fileID: 0}
+  heartIconHolder: {fileID: 0}
+  heartIconPrefab: {fileID: 0}
+  playerHealthBarImage: {fileID: 0}
+  playerPowerBarImage: {fileID: 0}
+  _livesRemaining: 3
+  attackList:
+  - {fileID: 11400000, guid: a7db6af4f9a28704480d19eb42d7b849, type: 2}
+  - {fileID: 11400000, guid: 78c49592ce8198c4c87a42415e358a17, type: 2}
+  ultimateAttackPrefab:
+  - {fileID: 3744133877081091469, guid: a2a060732547fe64581bb0cb3c2bdf1d, type: 3}
+  - {fileID: 4932088507883938021, guid: 0e5709a7ddb77924090c112cf73bb98a, type: 3}
+  dashCooldown: 1.5
+  dashSpeed: 15
+  invincibilityDuration: 0.5
+  isMisha: 0
+  playerAnimationList:
+  - {fileID: 9100000, guid: c9fed5823dedd80429be47e3fb3abeea, type: 2}
+  - {fileID: 9100000, guid: 9f856be1441a7fb49a479ff71c23a06e, type: 2}
+  - {fileID: 9100000, guid: fac496ac803f02941ba9ae73d98d7f75, type: 2}
+  - {fileID: 9100000, guid: 8ed88cfc63fcfe744a706c8db8ab4cac, type: 2}
+  - {fileID: 9100000, guid: 82a80c5957f7f924eb6fd5ea422d60ba, type: 2}
+  - {fileID: 9100000, guid: a6f0eec33aed85b46a5f7aad6dbf54aa, type: 2}
+  MishaAnimationList:
+  - {fileID: 9100000, guid: ebbb84e1b534b1c4e891347eb09d3db5, type: 2}
+  - {fileID: 9100000, guid: a9b2b0a0579fb484a915f546b23fe2fd, type: 2}
+  - {fileID: 9100000, guid: f151680bf2546604c9ef0a5e114cbd9e, type: 2}
+  - {fileID: 9100000, guid: 948efadce69411b4e95e47add0d679f6, type: 2}
+  - {fileID: 9100000, guid: f2e4826cb704f5a4880055fe6006154f, type: 2}
+  - {fileID: 9100000, guid: f1fb8e5ee2abec34cab2e21e32fe8d77, type: 2}
+  dropPrefab:
+  - {fileID: 2587291607013881087, guid: 85d5404d4ae67cf4c9eb3a197bd64b77, type: 3}
+  - {fileID: 2587291607013881087, guid: 9edbe3d35c0610f439038d0a6cec5e8c, type: 3}
+  - {fileID: 2587291607013881087, guid: 591689e67a15d064fa73fc92cfe5a2e6, type: 3}
+  dropRadius: 8
+  dropDetectionRadius: 15
+  deathSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 5f77080c546223f40b36e392fc112b73,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 50
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 0aa46c8cc958dc94997e2d93b9a411ba,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 50
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 20ef3afd26bf7ad4cb6c47c653bc28c0,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 50
+  - <Audio>k__BackingField: {fileID: 8300000, guid: c468f6dbedc7bb14fa2baf2df6b50645,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 50
+  bowSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 3e59ae103b5461b4683a45685af9785f,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 500
+  - <Audio>k__BackingField: {fileID: 8300000, guid: ca453ba22473c4d428d87b3bd8b0ac53,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 500
+  normalSlashSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 754b40f6a2394324690a1ecb2aa9e1aa,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 58c9a090bf6aa74468de9c6e2e49546b,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  criticalSlashSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 7f248b10956840a4696649967229af35,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 96609d4b1da317445963b58762c250c3,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 14704cedbf579f44d9b0557769a92161,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  boulderSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: b4516c38fa4c75e4b92ee79d43bfe0b4,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  - <Audio>k__BackingField: {fileID: 8300000, guid: fefd8aaf367df6e4990378ccff3bcd37,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  dashSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: f3558245d3bb97047b24c0ff991ebc63,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  - <Audio>k__BackingField: {fileID: 8300000, guid: f93b74af74132d84f928783c77c4b388,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  - <Audio>k__BackingField: {fileID: 8300000, guid: ea53c79d884d7284dae16759be5293ab,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 25
+  gravelFootstepsSFX:
+    <Audio>k__BackingField: {fileID: 8300000, guid: 9a67ab214217dfe4c963f19a8bd93b4c,
+      type: 3}
+    <Volume>k__BackingField: 0.25
+    <Range>k__BackingField: 25
+  dropSFX:
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 864aa65de40b2b74eb8f1e7c28dcee06,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 50
+  - <Audio>k__BackingField: {fileID: 8300000, guid: 8ea25ac501eab0542a5cc92a8ff99974,
+      type: 3}
+    <Volume>k__BackingField: 1
+    <Range>k__BackingField: 50

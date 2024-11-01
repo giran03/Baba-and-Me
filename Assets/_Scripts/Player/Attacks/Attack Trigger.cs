@@ -17,7 +17,6 @@ public class AttackTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Player Attacking: {other.name}!");
         if (other.TryGetComponent<IDamageable>(out var damageable))
             damageable.Damage(attackStats.Damage, attackStats.CriticalDamage, attackStats.CriticalChance);
     }

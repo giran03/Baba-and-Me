@@ -1,30 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SpritesLookAt : MonoBehaviour
 {
-    bool DoUpdate;
+    public bool DoUpdate { get; set; }
+    SpriteRenderer _spriteRenderer;
 
-    private void OnBecameVisible()
+    private void Start()
     {
-        DoUpdate = true;
+        if (TryGetComponent<SpriteRenderer>(out var renderer))
+            _spriteRenderer = renderer;
+        else
+            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if (_spriteRenderer != null)
+        {
+            _spriteRenderer.shadowCastingMode = ShadowCastingMode.On;
+            _spriteRenderer.receiveShadows = true;
+        }
     }
 
-    private void OnBecameInvisible()
+    private void FixedUpdate()
     {
-        DoUpdate = false;
-    }
+        if (!DoUpdate)
+        {
+            if (_spriteRenderer != null)
+                _spriteRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            return;
+        }
+        else
+            _spriteRenderer.shadowCastingMode = ShadowCastingMode.On;
 
-    private void LateUpdate()
-    {
-        if (!DoUpdate) return;
-        
         Vector3 cameraPosition = Camera.main.transform.position;
 
         cameraPosition.y = transform.position.y;
         transform.LookAt(cameraPosition, Vector3.up);
         transform.Rotate(transform.rotation.x, 180, transform.rotation.z);
     }
-
 }

@@ -97,12 +97,9 @@ public class PlayerWalking : PlayerBaseState
         spriteRenderer.material.color = Color.grey;
 
         CurrentContext.gameObject.GetComponent<Collider>().enabled = false;
-        Debug.Log($"Collider disabled for: {seconds} seconds");
 
         yield return new WaitForSeconds(seconds);
         CurrentContext.gameObject.GetComponent<Collider>().enabled = true;
         spriteRenderer.material.color = Color.white;
-
-        Debug.Log($"Collider enabled: {CurrentContext.gameObject.GetComponent<Collider>().enabled}");
     }
 }

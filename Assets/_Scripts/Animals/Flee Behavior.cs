@@ -19,8 +19,9 @@ public class FleeBehavior : MonoBehaviour
     [SerializeField] float range = 10f; //radius of sphere
 
     [Header("Random Movement Configs")]
-    [SerializeField] List<RuntimeAnimatorController > deerAnimations;
+    [SerializeField] List<RuntimeAnimatorController> deerAnimations;
     string _currentAnimation = "";
+    bool _hasPlayedFleeSound = false;
 
     void Start()
     {
@@ -51,15 +52,19 @@ public class FleeBehavior : MonoBehaviour
     // TODO: IMPROVE THIS!!! | Destroy after flee; Respawn; if hit by an arrow;
     private void FleeFromThreats()
     {
+        // sfx | check if animal has flee sound
+        if (!_hasPlayedFleeSound && TryGetComponent(out DeerHandler deerHandler))
+        {
+            deerHandler.deerSFX[1].Play(transform.position);
+            _hasPlayedFleeSound = true;
+        }
+
         //get the closest threat
         Transform closestThreat = null;
         float closestDistance = float.MaxValue;
         float distance = Vector3.Distance(transform.position, _player.transform.position);
         if (distance < closestDistance)
-        {
             closestThreat = _player.transform;
-            closestDistance = distance;
-        }
 
         //flee from the closest threat
         Vector3 fleeDirection = (transform.position - closestThreat.position).normalized;
@@ -73,6 +78,7 @@ public class FleeBehavior : MonoBehaviour
     void Patrol()
     {
         if (!agent.isActiveAndEnabled) return;
+        _hasPlayedFleeSound = false;
 
         if (agent.remainingDistance <= agent.stoppingDistance)
             if (RandomPoint(transform.position, range, out Vector3 point))

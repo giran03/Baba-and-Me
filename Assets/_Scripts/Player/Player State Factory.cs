@@ -7,7 +7,6 @@ public class PlayerStateFactory
         _context = currentContext;
     }
 
-
     public PlayerBaseState Idle()
     {
         return new PlayerIdle(_context, this);

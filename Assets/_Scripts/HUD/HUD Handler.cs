@@ -46,6 +46,9 @@ public class HUDHandler : MonoBehaviour
         rangedAttackCooldownIcon.gameObject.SetActive(false);
         dashCooldownIcon.gameObject.SetActive(false);
         grabCooldownIcon.gameObject.SetActive(false);
+
+        if (!PlayerConfigs.Instance.isMisha)
+            rangedAttackCooldownIcon.gameObject.SetActive(true);
     }
 
     public void StartIconCooldown(string iconName, float fillAmount)

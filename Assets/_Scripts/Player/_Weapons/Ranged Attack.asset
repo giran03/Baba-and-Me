@@ -16,6 +16,6 @@ MonoBehaviour:
   AttackSpeed: 4
   AttackDestroyTime: 2
   CriticalDamage: 1.5
-  CriticalChance: 0.2
+  CriticalChance: 1
   Damage: 30
   arrowForce: 7

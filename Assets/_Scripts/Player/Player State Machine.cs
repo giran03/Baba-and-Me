@@ -4,7 +4,6 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public class PlayerStateMachine : MonoBehaviour, IDamageable
 {
@@ -34,22 +33,30 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     float verticalInput;
 
     // configs
-    float _playerHealth;
+    public float playerHealth;
+    public float playerPower;
+    public bool canUseUltimate;
 
-    Rigidbody rb;
     Vector3 flatVel;
 
     // state variables
-    PlayerBaseState _currentState;
+    public static PlayerBaseState _currentState;
     PlayerStateFactory _states;
 
     // respawn
     (Vector3, quaternion) InitialPosition;
 
+    // all sprite references
+    List<SpritesLookAt> spritesLookAtList = new();
+
     // public declarations
     public Vector3 moveDirection;
-    private bool isRespawning;
+    static NavMeshAgent agent;
+    static Rigidbody rb;
+    static Collider _collider;
+    static SpriteRenderer _spriteRenderer;
 
+    public static bool isRespawning;
     public PlayerBaseState CurrentState { get => _currentState; set => _currentState = value; }
 
     private void Awake()
@@ -57,24 +64,38 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         _states = new(this);
         _currentState = _states.Idle();
         _currentState.EnterState();
+
+        PlayerPrefs.SetString("isPlayerReadyToAttack_Ranged", "true");
+        PlayerPrefs.SetString("isPlayerReadyToAttack", "true");
     }
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        InitialPosition = (transform.position, transform.rotation);
+        agent = GetComponent<NavMeshAgent>();
+        _collider = GetComponent<Collider>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        ResumePlayer();
 
         // set defaults
-        _playerHealth = PlayerConfigs.Instance.playerHealth;
+        InitialPosition = (transform.position, transform.rotation);
+        playerHealth = PlayerConfigs.Instance.playerHealth;
+        playerPower = PlayerConfigs.Instance.playerPower;
         KeysInventory = new();
 
         Time.timeScale = 1;
+
+        UpdateHealthBar();
+        UpdatePowerBar();
+
+        spritesLookAtList = FindObjectsOfType<SpritesLookAt>().ToList();
     }
 
     void Update()
     {
         if (PlayerConfigs.Instance.IsGameOver) return;
+        if (!PlayerConfigs.Instance.CanMove) return;
         if (isRespawning) return;
 
         // states
@@ -102,7 +123,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         CheckGameOver();
     }
 
-    void FixedUpdate() => MovePlayer();
+    void FixedUpdate()
+    {
+        MovePlayer();
+        CheckSpritesToUpdate();
+    }
+    // private void LateUpdate() => CheckSpritesToUpdate();
 
     void MyInput()
     {
@@ -151,38 +177,88 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
 
     public void Damage(int damageAmount, float weaponCriticalDamage, float weaponCriticalChance)
     {
-        _playerHealth -= damageAmount;
+        playerHealth = Mathf.Clamp(playerHealth - damageAmount, 0, 100);
         UpdateHealthBar();
 
-        Debug.Log($"PALYER HEALTH REDUCED TO: {_playerHealth}");
+        if (PlayerConfigs.Instance.isMisha)
+            PlayerConfigs.Instance.deathSFX[3].Play(transform.position);
+        else
+            PlayerConfigs.Instance.deathSFX[2].Play(transform.position);
+
+        Debug.Log($"PALYER HEALTH REDUCED TO: {playerHealth}");
     }
 
-    void UpdateHealthBar()
+    public void UpdateHealthBar() => PlayerConfigs.Instance.playerHealthBarImage.fillAmount = playerHealth / 100f;
+
+    public void UpdatePowerBar()
     {
-        PlayerConfigs.Instance.playerHealthBarImage.fillAmount = _playerHealth / 100f; //player max health = 100f
+        PlayerConfigs.Instance.playerPowerBarImage.fillAmount = playerPower / 100f;
+
+        if (playerPower >= 100)
+            canUseUltimate = true;
+        else
+            canUseUltimate = false;
     }
 
     public void CheckGameOver()
     {
-        if (_playerHealth <= 0)
+        if (playerHealth <= 0)
         {
-            // PlayerConfigs.Instance.IsGameOver = true;
+            if (PlayerConfigs.Instance._livesRemaining <= 0)
+            {
+                agent.SetDestination(transform.position);
+                StopPlayer();
+                PlayerConfigs.Instance.IsGameOver = true;
+                StartCoroutine(EndGame());
+
+                //sfx
+                if (PlayerConfigs.Instance.isMisha)
+                    PlayerConfigs.Instance.deathSFX[1].Play(transform.position);
+                else
+                    PlayerConfigs.Instance.deathSFX[0].Play(transform.position);
+                return;
+            }
+
             if (isRespawning) return;
 
             StartCoroutine(RespawnDelay());
 
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-            GetComponent<NavMeshAgent>().enabled = false;
+            agent.SetDestination(transform.position);
+            StopPlayer();
             _currentState.ChangeAnimation("Death");
             Debug.Log("GAME OVER");
         }
     }
 
+    public static void StopPlayer()
+    {
+        agent.acceleration = 0f;
+        agent.enabled = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        _collider.enabled = false;
+        _currentState.ChangeAnimation("Idle");
+        _spriteRenderer.color = Color.grey;
+    }
+
+
+    public static void ResumePlayer()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX |
+                        RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        _collider.enabled = true;
+        _currentState.ChangeAnimation("Idle");
+        _currentState.CheckAnimation();
+        _spriteRenderer.color = Color.white;
+    }
+
     IEnumerator RespawnDelay()
     {
         isRespawning = true;
+        PlayerConfigs.Instance.RemoveHeartIcon();
 
         yield return new WaitForSeconds(1.7f);
 
@@ -192,17 +268,40 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
 
     void RespawnPlayer()
     {
-        _playerHealth = 100f;
+        playerHealth = 100f;
         UpdateHealthBar();
+        UpdatePowerBar();
 
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionY;
-        transform.SetPositionAndRotation(InitialPosition.Item1, InitialPosition.Item2);
+        ResumePlayer();
+
+        // reset to initial position
+        // transform.SetPositionAndRotation(InitialPosition.Item1, InitialPosition.Item2);
+
         _currentState.ChangeAnimation("Idle");
+        _currentState.CheckAnimation();
         Physics.SyncTransforms();
 
-        GetComponent<NavMeshAgent>().enabled = true;
+        agent.enabled = true;
+        if (agent != null)
+            agent.velocity = Vector3.zero;
+        agent.acceleration = 0;
+    }
+
+    void CheckSpritesToUpdate()
+    {
+        foreach (SpritesLookAt _sprites in spritesLookAtList.Where(s => s != null))
+        {
+            if (Vector3.Distance(transform.position, _sprites.transform.position) < PlayerConfigs.Instance.spriteDistanceToUpdate)
+                _sprites.DoUpdate = true;
+            else
+                _sprites.DoUpdate = false;
+        }
+    }
+
+    IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(1.7f);
+        LevelManager.Instance.RestartCurrentLevel();
     }
 
     #region PUZZLE

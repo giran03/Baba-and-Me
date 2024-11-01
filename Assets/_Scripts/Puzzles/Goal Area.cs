@@ -8,25 +8,42 @@ using UnityEngine;
 /// </summary>
 public class GoalArea : MonoBehaviour
 {
+    public List<GameObject> objectsToEnable = new();
+    public List<GameObject> objectsToDisable = new();
+    public bool DestroyWhenFinished = false;
+
+    public List<GameObject> enemiesToKill = new();
+    List<GameObject> enemiesList = new();
     public static bool isGameFinished = false;
+    private bool _isObjectsEnabled;
+
+    private void Start() => enemiesList = enemiesToKill;
 
     private void Update()
     {
-        if (GameObject.FindGameObjectsWithTag("Orc").Length == 0 && !isGameFinished)
+        for (int i = enemiesList.Count - 1; i >= 0; i--)
         {
-            isGameFinished = true;
-            Debug.Log($"Can now go to the next level!");
+            GameObject enemy = enemiesList[i];
+            if (enemy == null)
+            {
+                enemiesList.RemoveAt(i);
+                Timer.DeerCounter--;
+            }
         }
-        else
-        {
-            Debug.Log($"There's Still ORC's remaining!");
-            isGameFinished = false;
-        }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Player") && isGameFinished)
-            Debug.Log($"LEVEL CLEAR!");
+        if (enemiesList.Count == 0 && !isGameFinished)
+            isGameFinished = true;
+        else
+            isGameFinished = false;
+
+        if (isGameFinished && !_isObjectsEnabled)
+        {
+            _isObjectsEnabled = true;
+            objectsToEnable?.ForEach(x => x.SetActive(true));
+            objectsToDisable?.ForEach(x => x.SetActive(false));
+
+            if (DestroyWhenFinished)
+                Destroy(gameObject);
+        }
     }
 }

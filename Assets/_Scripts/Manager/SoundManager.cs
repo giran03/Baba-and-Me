@@ -18,13 +18,9 @@ public class SoundManager : MonoBehaviour
     void Awake()
     {
         if (Instance != null && Instance != this)
-        {
             Destroy(this);
-        }
         else
-        {
             Instance = this;
-        }
 
         CreateAudioSources();
     }
@@ -48,7 +44,7 @@ public class SoundManager : MonoBehaviour
         return (position - listener.position).sqrMagnitude <= sound.Range * sound.Range;
     }
 
-    public void PlaySound(Sound sound, Vector3 position, float pitch = 1f)
+    public void PlaySound(Sound sound, Vector3 position, bool useRandomPitch = false, float pitch = 1f)
     {
         if (!CanBeHeard(position, sound))
         {
@@ -65,10 +61,11 @@ public class SoundManager : MonoBehaviour
         cachedSoundSource.transform.position = position;
         cachedSoundSource.SetSound(sound);
 
-        if (pitch != 1f)
-        {
-            cachedSoundSource.source.pitch = pitch;
-        }
+        if (useRandomPitch)
+            if (pitch != 1f)
+            {
+                cachedSoundSource.source.pitch = pitch;
+            }
 
         cachedSoundSource.source.Play();
     }

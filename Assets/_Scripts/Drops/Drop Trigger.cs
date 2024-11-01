@@ -1,9 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DropTrigger : MonoBehaviour
 {
+    // CONFIGS
+    float healAmount = 2;
+    int scoreIncreaseAmount = 5;
+    int powerIncreaseAmount = 5;
     bool isDetected;
     bool canPickup = false;
     GameObject player;
@@ -14,19 +17,7 @@ public class DropTrigger : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    private void OnTriggerEnter(Collider other) => PickUp(other);
-
-    void PickUp(Collider other)
-    {
-        if (other.CompareTag("Player") && canPickup)
-        {
-            Destroy(gameObject);
-            isDetected = false;
-            Debug.Log("DROP COLLECTED!");
-        }
-    }
-
-    private void Update()
+    private void LateUpdate()
     {
         if (!canPickup) return;
 
@@ -51,6 +42,34 @@ public class DropTrigger : MonoBehaviour
     {
         yield return new WaitForSeconds(1.25f);
         canPickup = true;
-        Debug.Log($"PICKUPPP!");
+    }
+
+    private void OnTriggerStay(Collider other) => PickUp(other);
+
+    void PickUp(Collider other)
+    {
+        if (other.CompareTag("Player") && canPickup)
+        {
+            switch (gameObject.tag)
+            {
+                case "Health Drop":
+                    PlayerConfigs.Instance.Heal(other, healAmount);
+                    Debug.Log("HP DROP COLLECTED!");
+                    break;
+
+                case "XP Drop":
+                    PlayerConfigs.Instance.IncreaseScore(scoreIncreaseAmount);
+                    Debug.Log("XP DROP COLLECTED!");
+                    break;
+
+                case "Power Drop":
+                    PlayerConfigs.Instance.PowerIncrease(other, powerIncreaseAmount);
+                    Debug.Log("POWER DROP COLLECTED!");
+                    break;
+            }
+
+            Destroy(gameObject);
+            isDetected = false;
+        }
     }
 }

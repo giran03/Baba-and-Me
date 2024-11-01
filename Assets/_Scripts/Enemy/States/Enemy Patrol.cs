@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class EnemyPatrol : EnemyBaseState
 {
     Collider[] _hitColliders;
+    private bool _gettingNewPoint;
 
     public EnemyPatrol(EnemyStateMachine currentContext, EnemyStateFactory factory) : base(currentContext, factory)
     {
@@ -20,7 +21,7 @@ public class EnemyPatrol : EnemyBaseState
     }
 
     public override void UpdateState()
-    { 
+    {
         CheckSwitchStates();
         Patrol();
 
@@ -57,14 +58,18 @@ public class EnemyPatrol : EnemyBaseState
     {
         if (!CurrentContext._navMeshAgent.isActiveAndEnabled) return;
 
-        if (CurrentContext._navMeshAgent.remainingDistance <= 0.1f)
-            if (RandomPoint(CurrentContext.transform.position, CurrentContext.patrolRadius, out Vector3 point))
-            {
-                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
-                CurrentContext._navMeshAgent.SetDestination(point);
-            }
+        if (RandomPoint(CurrentContext.transform.position, CurrentContext.patrolRadius, out Vector3 point) && !_gettingNewPoint)
+            CurrentContext.StartCoroutine(MoveToNewPatrolPoint(point));
     }
 
+    IEnumerator MoveToNewPatrolPoint(Vector3 point)
+    {
+        _gettingNewPoint = true;
+        yield return new WaitForSeconds(Random.Range(1, 4f));
+        _gettingNewPoint = false;
+        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+        CurrentContext._navMeshAgent.SetDestination(point);
+    }
 
     bool IsPlayerDetected()
     {

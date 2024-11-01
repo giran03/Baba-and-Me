@@ -15,7 +15,7 @@ public class EnemyStateMachine : MonoBehaviour
     public GameObject attackPrefab;
 
     [Header("Animation")]
-    public List<RuntimeAnimatorController > AnimationList;
+    public List<RuntimeAnimatorController> AnimationList;
 
     [HideInInspector] public NavMeshAgent _navMeshAgent;
     [HideInInspector] public bool isAttacking;
@@ -23,9 +23,6 @@ public class EnemyStateMachine : MonoBehaviour
     // state variables
     EnemyBaseState _currentState;
     EnemyStateFactory _states;
-
-    // references
-    DamageableStats damageableStats;
 
     public EnemyBaseState CurrentState { get => _currentState; set => _currentState = value; }
 
